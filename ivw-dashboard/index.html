@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Press Intelligence Monitor · German Publishing 2015–2024</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fff;--bg2:#f8f7f4;--bg3:#f1efe8;
+  --t:#18181a;--t2:#73726c;--t3:#a09e97;
+  --b:#e4e2d8;--b2:#c8c6bc;
+  --r:8px;--rl:12px;
+  --f:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+  --fm:'SF Mono','Fira Mono','Consolas',monospace;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#18181a;--bg2:#222224;--bg3:#2a2a2c;
+  --t:#e8e6de;--t2:#888780;--t3:#56544f;
+  --b:#333332;--b2:#444442;
+}}
+body{font-family:var(--f);font-size:13px;color:var(--t);background:var(--bg);line-height:1.5}
+button{font-family:var(--f);cursor:pointer}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+.wrap{max-width:1400px;margin:0 auto}
+.topbar{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:14px 24px;border-bottom:1px solid var(--b)}
+.tb-title{font-size:15px;font-weight:500;letter-spacing:-.02em;margin-bottom:5px}
+.tb-thesis{font-size:11px;color:var(--t2);max-width:700px;line-height:1.55;padding:8px 12px;background:var(--bg2);border-radius:var(--r);border-left:3px solid #1d4ed8;margin-top:4px}
+.tb-thesis strong{color:var(--t);font-weight:500}
+.tb-meta{font-size:10px;color:var(--t3);text-align:right;white-space:nowrap;line-height:1.8}
+.nav{display:flex;padding:0 24px;border-bottom:1px solid var(--b);gap:2px}
+.tab{font-size:12px;font-weight:500;padding:9px 14px;border:none;background:none;color:var(--t2);border-bottom:2px solid transparent;margin-bottom:-1px;cursor:pointer;transition:.12s;white-space:nowrap}
+.tab.on{color:var(--t);border-bottom-color:var(--t)}
+.page{padding:20px 24px;display:none}
+.page.on{display:block}
+.krow{display:grid;gap:10px;margin-bottom:18px}
+.k5{grid-template-columns:repeat(5,minmax(0,1fr))}
+.k4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.kc{background:var(--bg2);border-radius:var(--r);padding:12px 14px}
+.kc-l{font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px}
+.kc-v{font-size:21px;font-weight:500;line-height:1.1;letter-spacing:-.02em}
+.kc-d{font-size:10px;font-weight:500;margin-top:3px}
+.kc-s{font-size:10px;color:var(--t3);margin-top:3px}
+.up{color:#16a34a}.dn{color:#dc2626}.wa{color:#d97706}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.card{background:var(--bg2);border:1px solid var(--b);border-radius:var(--rl);padding:14px 16px}
+.ctitle{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;color:var(--t2);margin-bottom:10px}
+.cw{position:relative}
+.ins-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:18px}
+.ins{border-radius:var(--rl);padding:11px 14px;border:1px solid transparent;font-size:11px;line-height:1.6}
+.ins strong{display:block;font-size:11px;font-weight:500;margin-bottom:3px}
+.ig{background:#f0fdf4;border-color:#bbf7d0}.ig strong{color:#15803d}
+.ia{background:#fffbeb;border-color:#fde68a}.ia strong{color:#d97706}
+.ir{background:#fef2f2;border-color:#fecaca}.ir strong{color:#dc2626}
+.ib{background:#eff6ff;border-color:#bfdbfe}.ib strong{color:#1d4ed8}
+@media(prefers-color-scheme:dark){
+  .ig{background:#052e16;border-color:#166534}.ig strong{color:#4ade80}
+  .ia{background:#1c1400;border-color:#78350f}.ia strong{color:#fbbf24}
+  .ir{background:#1c0505;border-color:#7f1d1d}.ir strong{color:#f87171}
+  .ib{background:#0c1a35;border-color:#1e3a5f}.ib strong{color:#60a5fa}
+  .ins{color:var(--t2)}
+}
+.pbar{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+.pc{font-size:11px;font-weight:500;padding:4px 11px;border-radius:20px;border:1px solid var(--b);background:var(--bg);color:var(--t2);cursor:pointer;transition:.12s;white-space:nowrap}
+.pc:hover{border-color:var(--b2);color:var(--t)}
+.pc.on{color:#fff!important;border-color:transparent!important}
+.yrrow{display:flex;align-items:center;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.yb{font-size:11px;padding:3px 10px;border-radius:10px;border:1px solid var(--b);background:var(--bg);color:var(--t2);cursor:pointer;transition:.12s}
+.yb.on{background:var(--t);color:var(--bg);border-color:var(--t)}
+.brow{display:flex;align-items:center;gap:7px;margin-bottom:4px;cursor:pointer}
+.blbl{font-size:11px;color:var(--t2);width:148px;text-align:right;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btk{flex:1;background:var(--bg3);border-radius:2px;height:20px;overflow:hidden}
+.bfill{height:100%;display:flex;align-items:center;justify-content:flex-end;padding-right:6px}
+.bfill span{font-size:10px;font-weight:500;color:#fff;white-space:nowrap}
+.bnum{font-size:10px;color:var(--t2);width:76px;text-align:right;font-family:var(--fm);flex-shrink:0}
+.div{height:1px;background:var(--b);margin:16px 0}
+.slbl{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.05em;color:var(--t2);margin-bottom:10px}
+table{border-collapse:collapse;width:100%;font-size:11px}
+th{padding:6px 8px;border-bottom:1px solid var(--b);text-align:right;font-size:10px;color:var(--t2);font-weight:500;text-transform:uppercase;letter-spacing:.03em;white-space:nowrap}
+th:first-child{text-align:left}
+td{padding:5px 8px;border-bottom:1px solid var(--b);text-align:right;font-family:var(--fm);font-size:11px}
+td:first-child{text-align:left;font-family:var(--f);font-weight:500}
+tr:hover td{background:var(--bg3)}
+.mixbar{display:flex;height:16px;border-radius:4px;overflow:hidden;margin:6px 0 3px}
+.scatter-legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.sl-item{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--t2)}
+.sl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.arch-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:18px}
+.arch-card{border-radius:var(--rl);padding:13px 15px;border:1px solid var(--b);background:var(--bg2)}
+.tag{font-size:10px;font-weight:500;padding:2px 8px;border-radius:4px;display:inline-block}
+.tg{background:#f0fdf4;color:#15803d}.ta{background:#fffbeb;color:#92400e}.tr{background:#fef2f2;color:#991b1b}.tb{background:#eff6ff;color:#1e3a8a}
+@media(prefers-color-scheme:dark){.tg{background:#052e16;color:#4ade80}.ta{background:#1c1400;color:#fbbf24}.tr{background:#1c0505;color:#f87171}.tb{background:#0c1a35;color:#93c5fd}}
+.thesis-box{background:var(--bg2);border:1px solid var(--b);border-radius:var(--rl);padding:14px 16px}
+.thesis-box-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.thesis-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.thesis-pts{list-style:none;display:grid;gap:7px}
+.thesis-pts li{font-size:11px;color:var(--t2);line-height:1.6;padding-left:14px;position:relative}
+.thesis-pts li::before{content:'›';position:absolute;left:0;color:var(--t3);font-weight:500}
+.rec-block{border-radius:var(--rl);padding:13px 15px;border:1px solid transparent;margin-bottom:10px}
+.rec-rule{font-size:9px;font-weight:500;font-family:var(--fm);padding:2px 7px;border-radius:4px;background:var(--bg);border:1px solid var(--b);color:var(--t2);display:inline-block;margin-bottom:6px}
+.rec-head{font-size:12px;font-weight:500;margin-bottom:5px}
+.rec-body{font-size:11px;line-height:1.65;color:var(--t2)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h2 class="sr-only">Press Intelligence Monitor — Digitale Transformation der 10 größten deutschen Tageszeitungsverlage 2015–2024</h2>
+
+<div class="topbar">
+  <div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:5px">
+      <div class="tb-title">Press Intelligence Monitor</div>
+      <span style="font-size:11px;color:var(--t3);font-weight:400">German Publishing · IVW Panel 2015–2024 · 10 Verlagsgruppen</span>
+    </div>
+    <div class="tb-thesis"><strong>Kernthese:</strong> Trotz massiver Digitalisierungsinvestitionen verliert der Gesamtmarkt weiter an Auflage (10,4 → 6,5 Mio.). E-Paper kompensiert nur 1:6 Print-Verluste. <strong>Zentralisierung — nicht E-Paper-Quote</strong> — ist der entscheidende Resilienzfaktor. Wer Reichweite maximiert, opfert Monetarisierungstiefe (Reach-Revenue-Tradeoff). Der Markt polarisiert in vier strategische Archetypen.</div>
+  </div>
+  <div class="tb-meta">Lukas Barbutev · 2026<br><span style="color:var(--t3)">Datenquelle: IVW · Methodik: Röper (2014–2022)</span></div>
+</div>
+
+<div class="nav">
+  <button class="tab on" onclick="P('overview')">Marktübersicht</button>
+  <button class="tab" onclick="P('publisher')">Publisher-Profil</button>
+  <button class="tab" onclick="P('positioning')">Strategische Einordnung</button>
+  <button class="tab" onclick="P('strategy')">Handlungsempfehlungen</button>
+</div>
+
+<div id="page-overview" class="page on">
+  <div class="ins-row" id="ov-ins"></div>
+  <div class="krow k5" id="ov-kpis"></div>
+  <div class="yrrow" id="yr-ov"></div>
+  <div class="g2" style="margin-bottom:14px">
+    <div class="card"><div class="ctitle" id="ct-c">Anteilige Gesamtauflage 2022 — Top 10</div><div id="circ-bars"></div></div>
+    <div class="card"><div class="ctitle" id="ct-r">Online-Reichweite (PLS) 2022 — Top 10</div><div id="reach-bars"></div></div>
+  </div>
+  <div class="g3">
+    <div class="card"><div class="ctitle">Auflagen-Index alle Verlage (2015=100)</div><div class="cw" style="height:185px"><canvas id="c-ci" role="img" aria-label="Auflagen-Index alle Verlage">Auflagen-Index 2015-2024.</canvas></div></div>
+    <div class="card"><div class="ctitle">E-Paper-Anteil % alle Verlage</div><div class="cw" style="height:185px"><canvas id="c-ep" role="img" aria-label="E-Paper Anteil">E-Paper-Anteil 2015-2024.</canvas></div></div>
+    <div class="card"><div class="ctitle">Online-Reichweite-Index (2015=100)</div><div class="cw" style="height:185px"><canvas id="c-pi" role="img" aria-label="Online Reichweite Index">Online-Reichweite-Index 2015-2024.</canvas></div></div>
+  </div>
+</div>
+
+<div id="page-publisher" class="page">
+  <div class="pbar" id="pb-pub"></div>
+  <div class="krow k5" id="pub-kpis"></div>
+  <div class="g2" style="margin-bottom:14px">
+    <div class="card"><div class="ctitle" id="pub-ct1">Auflagen-Index & E-Paper-Anteil</div><div class="cw" style="height:200px"><canvas id="c-pc" role="img" aria-label="Auflagen und E-Paper Entwicklung">Auflagen und E-Paper.</canvas></div></div>
+    <div class="card"><div class="ctitle">Online-Reichweite-Index & Owned Channel Share</div><div class="cw" style="height:200px"><canvas id="c-pp" role="img" aria-label="Online Reichweite Entwicklung">Online-Reichweite.</canvas></div></div>
+  </div>
+  <div class="g3">
+    <div class="card" style="grid-column:span 2"><div class="ctitle">Channel-Mix Desktop / Mobile / App — Entwicklung 2015–2024</div><div class="cw" style="height:175px"><canvas id="c-pm" role="img" aria-label="Channel Mix Entwicklung">Channel-Mix.</canvas></div></div>
+    <div class="card"><div class="ctitle" id="pub-mix-title">Channel-Mix 2024</div><div id="pub-mix24" style="padding-top:4px"></div></div>
+  </div>
+  <div class="div"></div>
+  <div class="slbl">Vollständige Paneldaten</div>
+  <div style="overflow-x:auto"><table id="pub-tbl"></table></div>
+</div>
+
+<div id="page-positioning" class="page">
+  <div class="ins-row" id="pos-ins"></div>
+  <div class="g2" style="margin-bottom:14px">
+    <div class="card">
+      <div class="ctitle">Hero-Chart: Auflagenverlust vs. Online-Wachstum 2015→2024</div>
+      <div style="font-size:10px;color:var(--t2);margin-bottom:8px">X = Auflagenverlust (%) · Y = Online-Wachstum (%) · Blasengröße = Owned Channel Share 2024</div>
+      <div class="cw" style="height:280px"><canvas id="c-scatter" role="img" aria-label="Scatter Plot Resilienz vs Reichweite">Scatter Plot alle Verlage.</canvas></div>
+      <div class="scatter-legend" id="sc-leg"></div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Digitalisierungs-Score 2024 (E-Paper + App-Anteil)</div>
+      <div class="cw" style="height:390px"><canvas id="c-digi" role="img" aria-label="Digitalisierungs Score">Digitalisierungs-Score 2024.</canvas></div>
+    </div>
+  </div>
+  <div class="slbl" style="margin-bottom:12px">Strategische Archetypenkarte (Barbutev 2026, Kap. 6.5)</div>
+  <div class="arch-grid" id="arch-grid"></div>
+</div>
+
+<div id="page-strategy" class="page">
+  <div class="pbar" id="pb-strat"></div>
+  <div id="strat-body"></div>
+</div>
+
+</div>
+<script>
+const YRS=[2015,2016,2018,2020,2022,2024];
+const PC={2015:10358048,2016:9559920,2018:9140050,2020:8272017,2022:7140173,2024:6501063};
+const PP={2015:3299,2016:3033,2018:2941,2020:3054,2022:3049,2024:3974};
+
+const D={
+"SWMH":{n:"SWMH",full:"SWMH – Südwestdeutsche Medienholding",c:"#1d4ed8",arch:"Hybrid/Digital-First",at:"tb",
+  d:{2015:{ci:100,pi:100,ep:4.46,dsk:72.88,mew:15.92,app:11.2,own:15.66,circ:1685071,pls:260655400,out:28},2016:{ci:103.34,pi:100.96,ep:5.94,dsk:64.02,mew:24.54,app:11.43,own:17.37,circ:1741455,pls:263158100,out:28},2018:{ci:104.97,pi:106.9,ep:8.51,dsk:54.22,mew:33.99,app:11.79,own:20.3,circ:1768802,pls:278638500,out:30},2020:{ci:101.3,pi:113.05,ep:11.92,dsk:45.86,mew:40.62,app:13.52,own:25.44,circ:1709721,pls:294665800,out:31},2022:{ci:95.86,pi:92.07,ep:17.06,dsk:37.25,mew:46.72,app:16.03,own:33.09,circ:1618102,pls:239987300,out:31},2024:{ci:87.17,pi:114.42,ep:20.92,dsk:32.36,mew:49.64,app:18,own:38.92,circ:1468936,pls:298229400,out:31}},
+  thesis:["Stärkste Printresilienz im Panel (−12,8% vs. Panel-Ø −35,5%) — Resultat früher Zentralisierung zu Mantelredaktionen in Baden-Württemberg und Nordbayern; Größter Print-Verlag Deutschlands seit 2022","Süddeutsche Zeitung als Premiumanker mit 37,4% E-Paper-Anteil (2024) — weit über dem regionalen SWMH-Ø von 14–23%; zwei Digitalisierungsgeschwindigkeiten im Portfolio","Dachportal-Strategie (swp.de, stuttgarter-zeitung.de): 20+ Lokalausgaben unter einer Domain — Skaleneffekte bei Vermarktung, Technologie und Content-Produktion","Desktop-Rückgang 73%→32% zeigt konsequenten Mobile-Shift; sz.de mit 45% Desktop-Anteil bleibt Ausreißer und reflektiert Premium-Leserprofil","Zentralisierung als Wachstums- und Kostenstrategie: Shared Mantelredaktionen reduzieren Unit-Costs und schaffen finanziellen Spielraum für Print-Retention und digitale Investitionen"]},
+"Axel Springer":{n:"Axel Springer",full:"Axel Springer SE",c:"#111827",arch:"Digital-Conglomerate",at:"tb",
+  d:{2015:{ci:100,pi:100,ep:1.37,dsk:63.66,mew:21.21,app:15.13,own:16.5,circ:2391807,pls:2382086000,out:3},2016:{ci:92,pi:86.43,ep:2.2,dsk:50.25,mew:28.27,app:21.49,own:23.69,circ:2175525,pls:2058939000,out:3},2018:{ci:79.8,pi:78.46,ep:4.91,dsk:42.28,mew:40.48,app:17.24,own:22.15,circ:1882318,pls:1868920000,out:3},2020:{ci:83.5,pi:81.2,ep:11.22,dsk:25.82,mew:55.42,app:18.75,own:29.97,circ:1976457,pls:1934176000,out:3},2022:{ci:53.5,pi:83.51,ep:12.7,dsk:25.95,mew:50.98,app:23.07,own:35.77,circ:1266275,pls:1989194000,out:3},2024:{ci:58.71,pi:112.25,ep:24.86,dsk:25.65,mew:54.59,app:19.76,own:44.62,circ:1404195,pls:2673919000,out:3}},
+  thesis:["Strategische Transformation zum Tech-Konzern: Kernprofitabilität heute über StepStone (Jobs) und AVIV (Immobilien) — Zeitungstitel als Reichweite- und Brand-Asset, nicht primäre Erlösquelle","BILDplus und Welt+ als frühe Paywall-Vorreiter; konsistent höchster App-Anteil im Panel bis 2024 — Direct-to-Consumer als strategisches Erfolgsmodell","−41,3% Auflagenverlust ist strategisch intendierter Pivot: Berliner Morgenpost und Hamburger Abendblatt 2013 an Funke verkauft — kein passiver Marktdruck, sondern aktiver Portfolio-Umbau","Bild.de (Hochfrequenz-Masse, 2,1 Mrd. PLS/Monat) vs. welt.de (Premium-Traffic) — zwei komplementäre Digitalmodelle unter einem Dach","National-Segment ohne regionale Monopole: stärkster Substitutionsdruck durch globale Plattformen erklärt den frühzeitigen Pivot in non-journalistische, skalierbare Segmente"]},
+"Funke":{n:"Funke",full:"Funke Mediengruppe",c:"#0891b2",arch:"Harvest-Modus",at:"ta",
+  d:{2015:{ci:100,pi:100,ep:2.8,dsk:75.98,mew:24.02,app:0,own:2.8,circ:1315492,pls:112229900,out:14},2016:{ci:93.6,pi:120.84,ep:4.53,dsk:72.77,mew:27.23,app:0,own:4.53,circ:1243877,pls:135618100,out:14},2018:{ci:86.8,pi:106.71,ep:7.81,dsk:50.88,mew:49.12,app:0,own:7.81,circ:1154254,pls:119756000,out:13},2020:{ci:77,pi:152.71,ep:10.68,dsk:45.6,mew:54.4,app:0,own:10.68,circ:994559,pls:171382500,out:15},2022:{ci:64.2,pi:199.63,ep:14.63,dsk:15.21,mew:83.53,app:1.26,own:15.89,circ:844249,pls:224048700,out:14},2024:{ci:54.55,pi:118.73,ep:19.98,dsk:26.8,mew:73.2,app:0,own:19.98,circ:717508,pls:133247300,out:13}},
+  thesis:["WAZ als Content-Hub für NRZ, WP, WR — mehrere Stadtredaktionen auf Rumpfredaktionen reduziert; drei Thüringer Titel (TA, TLZ, OTZ) in einer Redaktionseinheit zusammengefasst (Röper 2016, 2022)","derwesten.de-Pivot 2018/19: Transformation vom Aggregationsportal zum reichweitenorientierten Tabloid-Brand — danach Einzelmarken-Websites für WAZ, NRZ etc. neu aufgesetzt","PLS-Anomalie 2022 (Index 199,6) mit Einbruch auf 118,7: Event-getriebener Traffic ohne nachhaltige Nutzerbindung — Schwäche des Volume-Ansatzes ohne Paywall-Funnel","Diversifikation in MarTech (Facelift), Classifieds und B2B-Services deutet auf Harvest-Modus: Zentralisierungsgewinne werden abgeschöpft statt reinvestiert","Kein App-Investment trotz 73% Mobile-Anteil — stärkster Hebel für Subscriber-Retention liegt strukturell ungenutzt; zeigt fehlende Subscription-Infrastruktur"]},
+"Ippen":{n:"Ippen",full:"Mediengruppe Ippen",c:"#15803d",arch:"Volume-First",at:"tg",
+  d:{2015:{ci:100,pi:100,ep:1.69,dsk:69.16,mew:30.84,app:0,own:1.69,circ:848433,pls:109791300,out:21},2016:{ci:81.9,pi:130.4,ep:2.4,dsk:62.73,mew:37.27,app:0,own:2.4,circ:694748,pls:143163600,out:21},2018:{ci:103.9,pi:154.59,ep:3.57,dsk:60.64,mew:39.36,app:0,own:3.57,circ:881479,pls:169721800,out:24},2020:{ci:98.5,pi:192.21,ep:4.71,dsk:44.2,mew:55.8,app:0,own:4.71,circ:835882,pls:211033800,out:26},2022:{ci:97.7,pi:163.05,ep:7.58,dsk:31.5,mew:68.5,app:0,own:7.58,circ:828771,pls:179019700,out:42},2024:{ci:102.1,pi:409.39,ep:12.77,dsk:37.24,mew:62.76,app:0,own:12.77,circ:866174,pls:449472000,out:43}},
+  thesis:["Einziger Verlag mit Auflagenwachstum (+2,1%) — getrieben durch 'Hessen Deals': Kauf Mediengruppe Frankfurt (FR+FNP) 2018 und VRM-Asset-Swap 2021 → regionale Mikro-Monopole als strukturelle Erlösstabilisierung","86 unabhängige Lokalredaktionen trotz Expansion — Gegenstrategie zur Vollzentralisierung; differenzierter Local Content schützt Klassifizierungsanzeigenmärkte und Leser-Loyalität","Digitale Vertikale (Ruhr24, Rosenheim24, Buzzfeed.de) generieren >100 Mio. PLS/Monat zusätzlich — im Basis-Panel nicht erfasst; realer digitaler Fußabdruck deutlich größer als Indexwert zeigt","Google-Discover-Gewinner: Service-Content (Wetter, Verbraucher, Lokales) strukturell auf Discover-Algorithmus optimiert — erklärt PLS-Sprung von 163→409 zwischen 2022 und 2024","Reach-first ohne Paywall: Programmatic Advertising als Primärerlösmodell — hohe Algorithmus-Abhängigkeit und geringe ARPU-Tiefe sind die strategische Achillesferse des Volume-First-Ansatzes"]},
+"Madsack":{n:"Madsack",full:"Madsack Mediengruppe",c:"#7c3aed",arch:"Hybrid/Digital-First",at:"tb",
+  d:{2015:{ci:100,pi:100,ep:2.26,dsk:86.1,mew:13.9,app:0,own:2.26,circ:980458,pls:49706051,out:18},2016:{ci:87.86,pi:100.02,ep:3.52,dsk:73.17,mew:26.83,app:0,own:3.52,circ:861387,pls:49718044,out:18},2018:{ci:83.76,pi:127.92,ep:5.13,dsk:62.46,mew:37.54,app:0,own:5.13,circ:821184,pls:63585718,out:19},2020:{ci:72.65,pi:147.59,ep:7.67,dsk:39.87,mew:60.13,app:0,own:7.67,circ:712340,pls:73362327,out:20},2022:{ci:68.95,pi:137.44,ep:10.66,dsk:37.21,mew:62.79,app:0,own:10.66,circ:675977,pls:68315722,out:20},2024:{ci:52.79,pi:234.71,ep:22.25,dsk:30.15,mew:69.85,app:0,own:22.25,circ:517571,pls:116667459,out:20}},
+  thesis:["RedaktionsNetzwerk Deutschland (RND): Zentralredaktion Hannover beliefert Madsack-Titel UND 60+ externe Verlage — Zentralisierung als duales Erlösmodell: Kostensenkung intern + Syndizierungserlöse extern","RND als Conversion-Funnel: Open-Web-Reichweite als Einstieg für Paywall-Konvertierung — 270.000 reine Digital-Abos (2025) zeigen, dass Reichweite und Monetarisierung im Hybrid-Modell keine Gegensätze sind","Aktualisierte Daten 2024: PLS-Index 234,7 — zweithöchstes Online-Wachstum im Panel nach Ippen; 2022-Einbruch (137) durch RND-Restrukturierung, Erholung 2024 durch neue Syndizierungspartnerschaften","Logistik-Dilemma Norddeutschland: E-Paper als strukturelle Antwort auf hohe Distributionskosten in dünn besiedelten Regionen; Kieler Nachrichten mit 32,98% E-Paper-Anteil als Beleg","DDVG-Verflechtung (SPD-Holding, ~26% an Dr. Erich Madsack GmbH): 2024 Übernahme weiterer DDV-Mediengruppe-Anteile — zunehmende Portfolio-Integration schafft weitere Skaleneffekte"]},
+"Aug. Allg.":{n:"Aug. Allg.",full:"Augsburger Allgemeine / Presse-Druck",c:"#d97706",arch:"Regional Champion",at:"tg",
+  d:{2015:{ci:100,pi:100,ep:5.55,dsk:81,mew:18.49,app:0.51,own:6.06,circ:659039,pls:78972500,out:6},2016:{ci:79,pi:86.08,ep:8.19,dsk:70.02,mew:29.47,app:0.51,own:8.7,circ:520662,pls:67983360,out:6},2018:{ci:80.51,pi:88.52,ep:8.6,dsk:64.84,mew:26.44,app:8.73,own:17.33,circ:530605,pls:69905500,out:7},2020:{ci:77.39,pi:98.99,ep:11.47,dsk:33.33,mew:33.33,app:33.33,own:44.8,circ:510045,pls:78176300,out:8},2022:{ci:73.3,pi:84.62,ep:12.68,dsk:33.33,mew:33.33,app:33.33,own:46.01,circ:483049,pls:66827520,out:7},2024:{ci:63.6,pi:114.52,ep:16.6,dsk:33.32,mew:45.74,app:20.94,own:37.54,circ:419128,pls:90441970,out:6}},
+  thesis:["Höchster App-Anteil aller Regionalverlage im Panel (20,94% in 2024) — übertrifft sogar nationalen Publisher Axel Springer; Push-Notification-getriebene Direktbindung an schwäbische Kerngemeinde","Hybride Online-Strategie: Subscription-Portale (augsburger-allgemeine.de, mainpost.de, suedkurier.de) + reichweitenorientiertes Free-Portal all-in.de — bewusste Trennung von Monetarisierungs- und Reichweitenlogik","Sukzessive Monopolkonsolidierung in Bayerisch-Schwaben durch Akquisition ehemals unabhängiger Lokalzeitungen — ähnlich Ippen, aber ohne aggressives überregionales Wachstum","E-Paper-Anteil (16,6%) unter Panelschnitt trotz solider App-Position — stärkste Hebel für Print-zu-Digital-Migration liegen ungenutzt; Potenzial für 5+ Prozentpunkte Steigerung","50%-Beteiligung am Allgäuer Zeitungsverlag und Main-Post-Gruppe als Beteiligungsportfolio — regionaler Skaleneffekt ohne Vollkonsolidierung und damit ohne vollständige Skalennutzung"]},
+"Rheinische Post":{n:"RP",full:"Rheinische Post Mediengruppe",c:"#b45309",arch:"Legacy Trap",at:"tr",
+  d:{2015:{ci:100,pi:100,ep:6.05,dsk:70.6,mew:28.93,app:0.47,own:6.52,circ:632452,pls:92522520,out:6},2016:{ci:83.9,pi:120.59,ep:6.22,dsk:57.21,mew:41.8,app:1,own:7.22,circ:531084,pls:111574800,out:6},2018:{ci:73,pi:120.01,ep:6.94,dsk:57.47,mew:40.77,app:1.76,own:8.7,circ:464726,pls:111040600,out:6},2020:{ci:72.8,pi:152.96,ep:11.3,dsk:44.86,mew:52.39,app:2.75,own:14.05,circ:462579,pls:141524800,out:6},2022:{ci:67,pi:152.13,ep:13.15,dsk:51.42,mew:44.43,app:4.15,own:17.3,circ:423023,pls:140752400,out:6},2024:{ci:54.07,pi:74.23,ep:16.36,dsk:56.95,mew:30.1,app:12.94,own:29.3,circ:341837,pls:68678730,out:5}},
+  thesis:["Einziger Verlag mit Desktop-Dominanz 2024 (56,95%) — demographische Ursache: ~46% der Kernleserschaft 60+ Jahre (ma 2022 Presse Medien); Mobile-Adoption strukturell gebremst durch Leserprofil","Doppelter Rückgang: −45,9% Auflage UND −25,8% Online-Reichweite — passive Erosion; anders als NOZ (bewusst strategischer PLS-Verzicht), ist bei RP kein strategisches Kalkül erkennbar","RP-Parlamentsredaktion Berlin (ab 2021): zu kleiner, zu später Zentralisierungsschritt — kein Vergleich zu Madsacks RND-Netzwerk das 60+ externe Verlage beliefert","Ressourcen-Pivot: Klassifieds (markt.gruppe), Radio und Logistik — Journalismusinvestments zurückgefahren; rp-online.de trotz technischer Konsolidierung ohne Reichweitenwachstum","Demografiefalle als Strukturproblem: Desktop-Affinität der Kernleserschaft dämpft ROI digitaler Investitionen und erklärt unterdurchschnittliche Mobile-Transformation"]},
+"DDVG":{n:"DDVG",full:"Deutsche Druck- und Verlagsgesellschaft (DDVG)",c:"#64748b",arch:"Strategic Holding",at:"ta",
+  d:{2015:{ci:100,pi:100,ep:4.43,dsk:87.29,mew:12.71,app:0,own:4.43,circ:575414,pls:26037330,out:11},2016:{ci:97.4,pi:111.75,ep:4.41,dsk:76.23,mew:23.77,app:0,own:4.41,circ:560583,pls:29097620,out:11},2018:{ci:87.2,pi:127.04,ep:6.48,dsk:64.84,mew:26.44,app:8.73,own:15.21,circ:501986,pls:33078990,out:9},2020:{ci:78.2,pi:190.47,ep:8.46,dsk:49.49,mew:44.62,app:5.89,own:14.35,circ:450162,pls:49593680,out:9},2022:{ci:76,pi:161.13,ep:10,dsk:43.93,mew:55.39,app:0.67,own:10.67,circ:437277,pls:41953110,out:9},2024:{ci:59.9,pi:228.38,ep:21.35,dsk:38.07,mew:60.29,app:1.63,own:22.98,circ:344449,pls:59463370,out:9}},
+  thesis:["SPD-Medienholding: ~26% Anteil an Dr. Erich Madsack GmbH als strategisches Kernasset — politisch motivierte Eigentümerstruktur mit stabiler Minderheitsbeteiligung im Marktführer","2024: Verkauf des 40%-Anteils an DDV Mediengruppe (inkl. Sächsische Zeitung) an Madsack — konsequente Transformation vom operativen Verleger zur reinen Holding-Gesellschaft","Online-Entwicklung hochgradig korreliert mit Madsack-Performance: RND-Synergien wirken auf DDVG-Kerntitel; Madsack-Beteiligung ist primärer Wachstumstreiber im digitalen Segment","E-Paper in ostdeutschen Regionen strukturell besonders relevant: dünne Besiedlung + hohe Distributionskosten in Sachsen, Thüringen, Brandenburg = natürliche E-Paper-Nachfrage","Direktes Kernportfolio (Neue Westfälische, Frankenpost) entwickelt sich schwächer als Madsack-Beteiligung — zeigt Holding-Charakter; DDVG verwaltet Beteiligungen statt operativ zu gestalten"]},
+"NOZ":{n:"NOZ",full:"Neue Osnabrücker Zeitung",c:"#be123c",arch:"Yield-First",at:"tr",
+  d:{2015:{ci:100,pi:100,ep:7.68,dsk:78.93,mew:21.07,app:0,own:7.68,circ:347994,pls:33815530,out:7},2016:{ci:103,pi:51.52,ep:9.97,dsk:49.71,mew:50.29,app:0,own:9.97,circ:352690,pls:17420690,out:7},2018:{ci:109,pi:112.45,ep:13.44,dsk:57.79,mew:42.21,app:0,own:13.44,circ:378254,pls:38026410,out:6},2020:{ci:95,pi:105.2,ep:19.27,dsk:42.82,mew:57.18,app:0,own:19.27,circ:330050,pls:35574750,out:6},2022:{ci:90,pi:37.6,ep:25.83,dsk:15.48,mew:84.52,app:0,own:25.83,circ:313976,pls:12713950,out:6},2024:{ci:65.15,pi:80.58,ep:32.44,dsk:34.71,mew:65.29,app:0,own:32.44,circ:226794,pls:27246950,out:4}},
+  thesis:["E-Paper-Marktführer im Panel: 32,44% (2024) — jede dritte bezahlte Ausgabe ist digital; ~60% der absoluten Print-Verluste kompensiert; frühe Investition in E-Paper-Migration zahlt sich strukturell aus","Paywall-Evolution: Hard-Paywall 2021 → Dynamic Behaviour-Based Paywall ab 2023 (GROW Digital Group) — Media Time +40%, Churn-Rate <3% (turi2 2024; NOZ/mh:n Pressemitteilung)","Bewiesene Wirtschaftlichkeit: Digitale Abo-Erlöse decken 2024 erstmals vollständige Redaktionskosten (NOZ/mh:n 2025) — einziger Verlag im Panel mit quantifiziertem Yield-First-Nachweis","PLS-Einbruch 2022 (Index 37,6) ist direkte Konsequenz der Hard-Paywall — strategisch bewusst akzeptierter Kollateralschaden; Erholung 2024 durch Dynamic-Paywall-Einführung bestätigt Strategie","'Centralized Decentralization' (GROW Digital Group): 40+ Lokalmarken bleiben als Brands sichtbar, technische Infrastruktur vollständig zentralisiert — Effizienz ohne Markenverlust"]},
+"DuMont":{n:"DuMont",full:"DuMont Mediengruppe",c:"#c2410c",arch:"Strategic Exit",at:"tr",
+  d:{2015:{ci:100,pi:100,ep:1.97,dsk:100,mew:0,app:0,own:1.97,circ:921638,pls:153664000,out:8},2016:{ci:95,pi:102.01,ep:3.52,dsk:100,mew:0,app:0,own:3.52,circ:877494,pls:156755400,out:8},2018:{ci:82,pi:122.73,ep:7.7,dsk:50.83,mew:49.17,app:0,own:7.7,circ:755924,pls:188585800,out:8},2020:{ci:31.5,pi:42.13,ep:9.44,dsk:32.35,mew:67.65,app:0,own:9.44,circ:290179,pls:64736960,out:3},2022:{ci:27,pi:56,ep:8.96,dsk:29.38,mew:70.62,app:0,own:8.96,circ:249745,pls:86045820,out:3},2024:{ci:21.1,pi:36.91,ep:12.73,dsk:21.82,mew:78.18,app:0,own:12.73,circ:194471,pls:56719040,out:3}},
+  thesis:["Systematischer Portfolio-Abbau: Berliner Zeitung (2019) und Hamburger Morgenpost (2020) verkauft — Index 21,1 reflektiert primär Divestments, nicht Subscriber-Verlust im Kernportfolio","Kernportfolio Rheinland (Kölner Stadt-Anzeiger, Express, Mitteldeutsche Zeitung): Tabloid-Format strukturell weniger E-Paper-affin — Express mit 0% E-Paper-Anteil als extremstes Beispiel","B2B-Pivot: Facelift (Social Media Management), DuMont Business Intelligence — höhere Margen und Skalierbarkeit außerhalb des strukturell schrumpfenden Zeitungsmarktes","Höchster MEW-Anteil im Panel (78,18% 2024) bei minimalem Desktop (21,8%): Mobile-Native Tabloid-Zielgruppe — aber kein App-Investment trotz Mobile-Dominanz","DuMont zeigt den Endpunkt des Strategic-Exit-Archetyps: bewusster, geordneter Rückzug aus Teilmärkten mit gezielter Neupositionierung — nicht Scheitern, sondern strategisches Portfoliomanagement"]}
+};
+
+const KS=Object.keys(D);
+let S={ovYr:2022,pubK:"SWMH",stratK:"SWMH",charts:{}};
+
+function dc(ids){(ids||Object.keys(S.charts)).forEach(id=>{if(S.charts[id]){try{S.charts[id].destroy();}catch(e){}delete S.charts[id];}});}
+function col(k){return D[k]?.c||'#888';}
+function gc(){const dk=matchMedia('(prefers-color-scheme:dark)').matches;return{g:dk?'rgba(255,255,255,.08)':'rgba(0,0,0,.06)',tk:dk?'#888780':'#73726c'};}
+function fp(v,d=1){return v==null?'—':v.toFixed(d)+'%';}
+function fi(v,d=1){return v==null?'—':v.toFixed(d);}
+function fk(v){if(v==null)return'—';if(v>=1e9)return(v/1e9).toFixed(2)+' Mrd.';if(v>=1e6)return(v/1e6).toFixed(2)+' Mio.';if(v>=1e3)return Math.round(v/1e3)+'K';return v;}
+
+function P(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('page-'+id).classList.add('on');
+  const idx={overview:0,publisher:1,positioning:2,strategy:3}[id];
+  document.querySelectorAll('.tab')[idx].classList.add('on');
+  if(id==='overview')rOv();
+  else if(id==='publisher')rPub();
+  else if(id==='positioning')rPos();
+  else if(id==='strategy')rStrat();
+}
+
+function bYr(el,a,fn){if(!el)return;el.innerHTML=`<span style="font-size:11px;color:var(--t2);margin-right:4px">Jahr:</span>`+YRS.map(y=>`<button class="yb ${y===a?'on':''}" onclick="${fn}(${y})">${y}</button>`).join('');}
+function bPBar(el,a,fn){if(!el)return;el.innerHTML=KS.map(k=>{const c=col(k),on=k===a;return`<button class="pc ${on?'on':''}" style="${on?'background:'+c+';border-color:'+c:''}" onclick="${fn}('${k}')">${D[k].n}</button>`;}).join('');}
+function bBars(el,items){if(!el)return;const mx=Math.max(...items.map(x=>x.v||0),1);el.innerHTML=items.map((it,i)=>{const w=Math.round((it.v||0)/mx*100);return`<div class="brow" onclick="switchPub('${it.k}')"><div class="blbl">${i+1}. ${it.label}</div><div class="btk"><div class="bfill" style="width:${w}%;background:${it.c}"><span>${it.pct}</span></div></div><div class="bnum">${it.num}</div></div>`;}).join('');}
+
+function mkL(id,ds,yfmt,mn){
+  const c=document.getElementById(id);if(!c||S.charts[id])return;
+  const cc=gc();
+  S.charts[id]=new Chart(c,{type:'line',data:{labels:YRS,datasets:ds},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},scales:{x:{ticks:{font:{size:9},color:cc.tk},grid:{display:false}},y:{min:mn,ticks:{font:{size:9},color:cc.tk,callback:yfmt},grid:{color:cc.g}}}}});
+}
+
+function rOv(){
+  const yr=S.ovYr;const cc=gc();
+  bYr(document.getElementById('yr-ov'),yr,'setOvYr');
+  const tC=PC[yr],pC=PC[YRS[YRS.indexOf(yr)-1]||2015],tP=PP[yr];
+  const aEp=KS.reduce((s,k)=>s+(D[k].d[yr]?.ep||0),0)/KS.length;
+  const aOw=KS.reduce((s,k)=>s+(D[k].d[yr]?.own||0),0)/KS.length;
+  const mS={2015:49.2,2016:54.2,2018:56.9,2020:56.8,2022:53.4,2024:57.5}[yr];
+  const cd=((tC-pC)/pC*100).toFixed(1);
+  document.getElementById('ov-kpis').innerHTML=`
+    <div class="kc"><div class="kc-l">Panel-Gesamtauflage ${yr}</div><div class="kc-v">${(tC/1e6).toFixed(2)} Mio.</div><div class="kc-d ${parseFloat(cd)<0?'dn':'up'}">${cd>0?'+':''}${cd}% ggü. Vorperiode</div><div class="kc-s">Summe anteiliger Auflagen, 10 Verlage</div></div>
+    <div class="kc"><div class="kc-l">Online-Reichweite Panel</div><div class="kc-v">${tP} Mrd.</div><div class="kc-s">PLS anteilig, Mrd. Page Impressions</div></div>
+    <div class="kc"><div class="kc-l">Ø E-Paper-Anteil</div><div class="kc-v">${aEp.toFixed(1)}%</div><div class="kc-s">Marktdurchschnitt ${yr}: 21,4%</div></div>
+    <div class="kc"><div class="kc-l">Ø Owned Channel Share</div><div class="kc-v">${aOw.toFixed(1)}%</div><div class="kc-s">E-Paper + App anteilig</div></div>
+    <div class="kc"><div class="kc-l">Marktanteil Panel</div><div class="kc-v">${mS}%</div><div class="kc-s">am ges. dt. Tageszeitungsmarkt</div></div>`;
+  document.getElementById('ov-ins').innerHTML=`
+    <div class="ins ir"><strong>Print-Erosion: −37% in 9 Jahren</strong>Panel-Gesamtauflage 10,4 Mio. (2015) → 6,5 Mio. (2024). Gesamtmarkt schrumpfte sogar um 46% — größere Verlage sind resilienter als der Marktdurchschnitt.</div>
+    <div class="ins ia"><strong>E-Paper kompensiert nur 1:6</strong>Auf jeden neuen E-Paper-Leser kommen sechs verlorene Print-Abonnenten. E-Paper stabilisiert Total Paid Circulation, kann strukturellen Marktdruck aber nicht aufhalten.</div>
+    <div class="ins ig"><strong>Online-Reichweite: Trendbruch 2024</strong>Nach Stagnation 2015–2022 (Panel-Index 87–94) springt das Aggregat 2024 auf 125 — getrieben von Ippen (Google-Discover) und Madsack (RND-Expansion).</div>`;
+  document.getElementById('ct-c').textContent=`Anteilige Gesamtauflage ${yr} — Top 10`;
+  document.getElementById('ct-r').textContent=`Online-Reichweite (PLS) ${yr} — Top 10`;
+  const tCA=KS.reduce((s,k)=>s+(D[k].d[yr]?.circ||0),0);
+  const tPA=KS.reduce((s,k)=>s+(D[k].d[yr]?.pls||0),0);
+  bBars(document.getElementById('circ-bars'),KS.map(k=>({k,label:D[k].n,v:D[k].d[yr]?.circ||0,c:col(k),pct:((D[k].d[yr]?.circ||0)/tCA*100).toFixed(1)+'%',num:fk(D[k].d[yr]?.circ)})).sort((a,b)=>b.v-a.v));
+  bBars(document.getElementById('reach-bars'),KS.map(k=>({k,label:D[k].n,v:D[k].d[yr]?.pls||0,c:col(k),pct:((D[k].d[yr]?.pls||0)/tPA*100).toFixed(1)+'%',num:fk(D[k].d[yr]?.pls)})).sort((a,b)=>b.v-a.v));
+  dc(['c-ci','c-ep','c-pi']);
+  mkL('c-ci',KS.map(k=>({label:D[k].n,data:YRS.map(y=>D[k].d[y]?.ci??null),borderColor:col(k),tension:.35,pointRadius:2,borderWidth:1.5,fill:false,spanGaps:true})),v=>v,0);
+  mkL('c-ep',KS.map(k=>({label:D[k].n,data:YRS.map(y=>D[k].d[y]?.ep??null),borderColor:col(k),tension:.35,pointRadius:2,borderWidth:1.5,fill:false,spanGaps:true})),v=>v+'%',0);
+  mkL('c-pi',KS.map(k=>({label:D[k].n,data:YRS.map(y=>D[k].d[y]?.pi??null),borderColor:col(k),tension:.35,pointRadius:2,borderWidth:1.5,fill:false,spanGaps:true})),v=>v,0);
+}
+function setOvYr(y){S.ovYr=y;dc(['c-ci','c-ep','c-pi']);rOv();}
+function switchPub(k){S.pubK=k;P('publisher');}
+function setPubK(k){S.pubK=k;dc(['c-pc','c-pp','c-pm']);bPBar(document.getElementById('pb-pub'),k,'setPubK');rPub();}
+
+function rPub(){
+  const k=S.pubK,dd=D[k].d,c=col(k),cc=gc();
+  bPBar(document.getElementById('pb-pub'),k,'setPubK');
+  const d24=dd[2024],d15=dd[2015];
+  const aCi=KS.reduce((s,k2)=>s+(D[k2].d[2024]?.ci||0),0)/KS.length;
+  const rCi=KS.slice().sort((a,b)=>(D[b].d[2024]?.ci||0)-(D[a].d[2024]?.ci||0)).indexOf(k)+1;
+  const rPi=KS.slice().sort((a,b)=>(D[b].d[2024]?.pi||0)-(D[a].d[2024]?.pi||0)).indexOf(k)+1;
+  const ownershipNote={
+    "DDVG":`<div style="margin-top:10px;padding:8px 12px;background:#f8f7f4;border:1px solid #e4e2d8;border-left:3px solid #64748b;border-radius:0 8px 8px 0;font-size:11px;color:#73726c;line-height:1.55"><strong style="color:#18181a">Beteiligungsstruktur:</strong> SPD-Medienholding · ~26% an Dr. Erich Madsack GmbH · Metriken stark <span style="cursor:pointer;text-decoration:underline;color:#7c3aed" onclick="setPubK('Madsack')">Madsack</span>-korreliert · 2024: Verkauf DDV-Anteile → zunehmende Holding-Struktur</div>`,
+    "Madsack":`<div style="margin-top:10px;padding:8px 12px;background:#f8f7f4;border:1px solid #e4e2d8;border-left:3px solid #7c3aed;border-radius:0 8px 8px 0;font-size:11px;color:#73726c;line-height:1.55"><strong style="color:#18181a">Verflechtung:</strong> <span style="cursor:pointer;text-decoration:underline;color:#64748b" onclick="setPubK('DDVG')">DDVG</span> (SPD) hält ~26% · RND beliefert 60+ externe Verlage · 2024: Übernahme weiterer DDV-Anteile</div>`,
+  }[k]||'';
+  document.getElementById('pub-kpis').innerHTML=`
+    <div class="kc" style="border-left:3px solid ${c}"><div class="kc-l">Auflagen-Index 2024</div><div class="kc-v" style="color:${d24.ci<70?'#dc2626':d24.ci>90?'#16a34a':'#d97706'}">${fi(d24.ci)}</div><div class="kc-d ${d24.ci<100?'dn':'up'}">${(d24.ci-100)>0?'+':''}${(d24.ci-100).toFixed(1)} Punkte · Rang #${rCi}</div></div>
+    <div class="kc" style="border-left:3px solid ${c}"><div class="kc-l">Online-Reichweite-Index 2024</div><div class="kc-v" style="color:${d24.pi>150?'#16a34a':d24.pi<80?'#dc2626':'#d97706'}">${fi(d24.pi)}</div><div class="kc-d ${d24.pi>100?'up':'dn'}">${(d24.pi-100)>0?'+':''}${(d24.pi-100).toFixed(1)}% · Rang #${rPi}</div></div>
+    <div class="kc" style="border-left:3px solid ${c}"><div class="kc-l">E-Paper-Anteil 2024</div><div class="kc-v" style="color:${c}">${d24.ep}%</div><div class="kc-s">2015: ${d15.ep}% · +${(d24.ep-d15.ep).toFixed(1)}pp</div></div>
+    <div class="kc" style="border-left:3px solid ${c}"><div class="kc-l">Owned Channel Share 2024</div><div class="kc-v">${d24.own}%</div><div class="kc-s">2015: ${d15.own}%</div></div>
+    <div class="kc" style="border-left:3px solid ${c}"><div class="kc-l">Outlets im Panel</div><div class="kc-v">${d24.out}</div><div class="kc-s">2015: ${d15.out} Titel</div></div>`;
+  document.getElementById('pub-ownership-note')?.remove();
+  if(ownershipNote){const n=document.createElement('div');n.id='pub-ownership-note';n.innerHTML=ownershipNote;document.getElementById('pub-kpis').insertAdjacentElement('afterend',n);}
+  document.getElementById('pub-ct1').textContent=`Auflagen-Index & E-Paper — ${D[k].n}`;
+  dc(['c-pc','c-pp','c-pm']);
+  const c1=document.getElementById('c-pc');
+  if(c1&&!S.charts['c-pc'])S.charts['c-pc']=new Chart(c1,{type:'line',data:{labels:YRS,datasets:[
+    {label:'Auflagen-Index',data:YRS.map(y=>dd[y]?.ci??null),borderColor:c,backgroundColor:c+'18',tension:.35,pointRadius:4,borderWidth:2.5,fill:true,yAxisID:'y',spanGaps:true},
+    {label:'E-Paper %',data:YRS.map(y=>dd[y]?.ep??null),borderColor:'#f59e0b',tension:.35,pointRadius:4,borderWidth:2,fill:false,yAxisID:'y2',spanGaps:true,borderDash:[5,5]},
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},
+    scales:{x:{ticks:{font:{size:9},color:cc.tk},grid:{display:false}},y:{position:'left',ticks:{font:{size:9},color:cc.tk},grid:{color:cc.g},title:{display:true,text:'Index (2015=100)',font:{size:9},color:cc.tk}},y2:{position:'right',ticks:{font:{size:9},color:cc.tk,callback:v=>v+'%'},grid:{display:false},title:{display:true,text:'E-Paper %',font:{size:9},color:cc.tk}}}}});
+  const c2=document.getElementById('c-pp');
+  if(c2&&!S.charts['c-pp'])S.charts['c-pp']=new Chart(c2,{type:'line',data:{labels:YRS,datasets:[
+    {label:'Online-Reichweite-Index',data:YRS.map(y=>dd[y]?.pi??null),borderColor:c,tension:.35,pointRadius:4,borderWidth:2.5,fill:false,yAxisID:'y',spanGaps:true},
+    {label:'Owned Channel %',data:YRS.map(y=>dd[y]?.own??null),borderColor:'#7c3aed',tension:.35,pointRadius:4,borderWidth:2,fill:false,yAxisID:'y2',spanGaps:true,borderDash:[5,5]},
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},
+    scales:{x:{ticks:{font:{size:9},color:cc.tk},grid:{display:false}},y:{position:'left',ticks:{font:{size:9},color:cc.tk},grid:{color:cc.g},title:{display:true,text:'Reichweite-Index',font:{size:9},color:cc.tk}},y2:{position:'right',ticks:{font:{size:9},color:cc.tk,callback:v=>v+'%'},grid:{display:false},title:{display:true,text:'Owned %',font:{size:9},color:cc.tk}}}}});
+  const c3=document.getElementById('c-pm');
+  if(c3&&!S.charts['c-pm'])S.charts['c-pm']=new Chart(c3,{type:'bar',data:{labels:YRS,datasets:[
+    {label:'Desktop',data:YRS.map(y=>dd[y]?.dsk??null),backgroundColor:'#1d4ed8',stack:'s',borderWidth:0},
+    {label:'Mobile',data:YRS.map(y=>dd[y]?.mew??null),backgroundColor:'#0891b2',stack:'s',borderWidth:0},
+    {label:'App',data:YRS.map(y=>dd[y]?.app??null),backgroundColor:'#7c3aed',stack:'s',borderWidth:0},
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',callbacks:{label:ctx=>ctx.dataset.label+': '+(ctx.raw||0).toFixed(1)+'%'}}},
+    scales:{x:{stacked:true,ticks:{font:{size:9},color:cc.tk},grid:{display:false}},y:{stacked:true,max:100,ticks:{font:{size:9},color:cc.tk,callback:v=>v+'%'},grid:{color:cc.g}}}}});
+  const dY=dd[2024];
+  document.getElementById('pub-mix-title').textContent=`Channel-Mix 2024 — ${D[k].n}`;
+  document.getElementById('pub-mix24').innerHTML=`
+    <div class="mixbar">
+      ${dY.dsk>0?`<div style="width:${dY.dsk.toFixed(1)}%;background:#1d4ed8;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;color:#fff;overflow:hidden">${dY.dsk.toFixed(0)}%</div>`:''}
+      ${dY.mew>0?`<div style="width:${dY.mew.toFixed(1)}%;background:#0891b2;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;color:#fff;overflow:hidden">${dY.mew.toFixed(0)}%</div>`:''}
+      ${dY.app>0?`<div style="width:${dY.app.toFixed(1)}%;background:#7c3aed;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;color:#fff;overflow:hidden">${dY.app.toFixed(0)}%</div>`:''}
+    </div>
+    <div style="display:flex;gap:10px;font-size:10px;color:var(--t2);margin-bottom:12px">
+      <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#1d4ed8;margin-right:3px"></span>Desktop ${fp(dY.dsk)}</span>
+      <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#0891b2;margin-right:3px"></span>Mobile ${fp(dY.mew)}</span>
+      <span><span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:#7c3aed;margin-right:3px"></span>App ${fp(dY.app)}</span>
+    </div>
+    ${YRS.map(y=>{const dy=dd[y]||{};return`<div style="display:flex;justify-content:space-between;border-bottom:0.5px solid var(--b);padding:3px 0;font-size:10px"><span style="color:var(--t2)">${y}</span><span style="font-family:var(--fm)">D ${dy.dsk?.toFixed(0)||'—'}% · M ${dy.mew?.toFixed(0)||'—'}% · A ${dy.app?.toFixed(0)||'—'}%</span></div>`;}).join('')}`;
+  const th='<tr><th style="text-align:left">Jahr</th><th>Auflage</th><th>Auflagen-Idx</th><th>E-Paper %</th><th>Online-Reichweite</th><th>Reichweite-Idx</th><th>Desktop %</th><th>Mobile %</th><th>App %</th><th>Owned %</th><th>Outlets</th></tr>';
+  const rows=YRS.map(y=>{const dY=dd[y]||{};const ec=dY.ep>20?'color:#16a34a':dY.ep>10?`color:${c}`:'';return`<tr><td style="font-weight:500">${y}</td><td>${fk(dY.circ)}</td><td style="color:${dY.ci<70?'#dc2626':dY.ci>90?'#16a34a':''}">${fi(dY.ci)}</td><td style="${ec}">${fp(dY.ep)}</td><td>${fk(dY.pls)}</td><td style="color:${dY.pi>150?'#16a34a':dY.pi<80?'#dc2626':''}">${fi(dY.pi)}</td><td>${fp(dY.dsk)}</td><td>${fp(dY.mew)}</td><td>${fp(dY.app)}</td><td style="font-weight:500">${fp(dY.own)}</td><td>${dY.out||'—'}</td></tr>`;}).join('');
+  document.getElementById('pub-tbl').innerHTML='<thead>'+th+'</thead><tbody>'+rows+'</tbody>';
+}
+
+function rPos(){
+  const cc=gc();
+  document.getElementById('pos-ins').innerHTML=`
+    <div class="ins ig"><strong>Ippen — Einziger Doppelgewinner</strong>Auflagenwachstum +2,1% UND Online-Wachstum +309%. Google-Discover-Strategie + Mikro-Monopole = struktureller Marktvorsprung.</div>
+    <div class="ins ir"><strong>RP & DuMont — Doppelrückgang</strong>Einzige Verlage mit Rückgang in Auflage UND Reichweite. Gegensätzliche Ursachen: passive Erosion (RP) vs. strategischer Exit (DuMont).</div>
+    <div class="ins ib"><strong>NOZ-Paradox: Weniger Reichweite = mehr Umsatz</strong>PLS-Index 80,6 — aber digitale Abos decken 2024 erstmals vollständige Redaktionskosten. Yield-First ist wirtschaftlich nachhaltiger als Volume-First.</div>`;
+  dc(['c-scatter','c-digi']);
+  const pts=KS.map(k=>{const d24=D[k].d[2024];return{k,label:D[k].n,x:parseFloat((100-d24.ci).toFixed(1)),y:parseFloat((d24.pi-100).toFixed(1)),r:Math.max(7,d24.own/2.8+6),c:col(k)};});
+  const sc=document.getElementById('c-scatter');
+  if(sc&&!S.charts['c-scatter'])S.charts['c-scatter']=new Chart(sc,{type:'bubble',data:{datasets:pts.map(p=>({label:p.label,data:[{x:p.x,y:p.y,r:p.r}],backgroundColor:p.c+'cc',borderColor:p.c,borderWidth:1.5}))},options:{responsive:true,maintainAspectRatio:false,layout:{padding:24},plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: Aufl. −${ctx.raw.x.toFixed(0)}%, Online +${ctx.raw.y.toFixed(0)}%`}}},
+    scales:{x:{title:{display:true,text:'Auflagenverlust 2015→2024 (%)',font:{size:10},color:cc.tk},ticks:{font:{size:9},color:cc.tk,callback:v=>v+'%'},grid:{color:cc.g},min:-10,max:90},y:{title:{display:true,text:'Online-Wachstum 2015→2024 (%)',font:{size:10},color:cc.tk},ticks:{font:{size:9},color:cc.tk,callback:v=>v+'%'},grid:{color:cc.g},min:-80,max:360}}}});
+  const leg=document.getElementById('sc-leg');
+  if(leg)leg.innerHTML=pts.map(p=>`<span class="sl-item"><span class="sl-dot" style="background:${p.c}"></span>${p.label}</span>`).join('');
+  const sd=KS.slice().sort((a,b)=>(D[b].d[2024].ep+D[b].d[2024].own)-(D[a].d[2024].ep+D[a].d[2024].own));
+  const dg=document.getElementById('c-digi');
+  if(dg&&!S.charts['c-digi'])S.charts['c-digi']=new Chart(dg,{type:'bar',data:{labels:sd.map(k=>D[k].n),datasets:[
+    {label:'E-Paper %',data:sd.map(k=>D[k].d[2024].ep),backgroundColor:sd.map(k=>col(k)),stack:'s',borderWidth:0},
+    {label:'App %',data:sd.map(k=>D[k].d[2024].app),backgroundColor:sd.map(k=>col(k)+'77'),stack:'s',borderWidth:0},
+  ]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+ctx.raw.toFixed(1)+'%'}}},
+    scales:{x:{stacked:true,ticks:{font:{size:9},color:cc.tk,callback:v=>v+'%'},grid:{color:cc.g}},y:{stacked:true,ticks:{font:{size:9},color:cc.tk},grid:{display:false}}}}});
+  const archs=[
+    {at:'tb',title:'Volume-First',who:'Ippen',tags:['No Paywall','SEO/Discover','Programmatic','Mikro-Monopole'],body:'Reichweite-Maximierung durch Free-Content + digitale Vertikale (Ruhr24 etc.). Programmatic Ads als Primärerlös. Struktureller Google-Discover-Vorteil. Print-Basis durch regionale Mikro-Monopole. Risiko: hohe Algorithmus-Abhängigkeit, niedrige ARPU-Tiefe.'},
+    {at:'tr',title:'Yield-First',who:'NOZ',tags:['Dynamic Paywall','E-Paper-Leader','Churn <3%','Abo-First'],body:'ARPU-Maximierung durch strikte Paywall-Evolution (Hard 2021 → Dynamic 2023). 32,4% E-Paper. Churn <3%. Digitale Abos decken Redaktionskosten 2024. Bewusster PLS-Verzicht für stabile Subscriber-Basis.'},
+    {at:'tb',title:'Hybrid/Digital-First',who:'Madsack, SWMH',tags:['RND/Dachportale','Hybrid-Paywall','Zentralisierung','Skaleneffekte'],body:'Open-Web-Reichweite als Funnel + Subscription-Monetarisierung. Madsack: RND = 60+ externe Verlage + 270K Abos. SWMH: Dachportale + beste Printresilienz. Zentralisierung als Wachstums- und Kostenstrategie zugleich.'},
+    {at:'tr',title:'Divestment / Legacy Trap',who:'DuMont, RP',tags:['Portfolio-Abbau','B2B-Pivot','Passive Erosion','Demografiefalle'],body:'DuMont: gezielter Exit + B2B/MarTech-Aufbau (Facelift). RP: demographisch bedingte Digitalstarre (46% Leser 60+, Desktop-Dominanz). Beide verlieren Auflage und Reichweite — aus gegensätzlichen strategischen Kalkülen.'},
+  ];
+  document.getElementById('arch-grid').innerHTML=archs.map(a=>`
+    <div class="arch-card">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <span class="tag ${a.at}">${a.title}</span>
+        <span style="font-size:11px;color:var(--t2)">${a.who}</span>
+      </div>
+      <div style="font-size:11px;line-height:1.65;color:var(--t2);margin-bottom:8px">${a.body}</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap">${a.tags.map(t=>`<span style="font-size:10px;padding:2px 7px;border-radius:4px;background:var(--bg3);color:var(--t2);border:1px solid var(--b)">${t}</span>`).join('')}</div>
+    </div>`).join('');
+}
+
+function setStratK(k){S.stratK=k;bPBar(document.getElementById('pb-strat'),k,'setStratK');rStrat();}
+
+function rStrat(){
+  const k=S.stratK,dd=D[k].d,c=col(k),d24=dd[2024];
+  bPBar(document.getElementById('pb-strat'),k,'setStratK');
+  const aEp=KS.reduce((s,k2)=>s+(D[k2].d[2024]?.ep||0),0)/KS.length;
+  const aCi=KS.reduce((s,k2)=>s+(D[k2].d[2024]?.ci||0),0)/KS.length;
+
+  const rules=[];
+  if(d24.pi<85&&d24.ep<aEp)rules.push({t:'ir',rule:'PI<85 + EP<Panel-Ø',head:'Doppelter Handlungsbedarf: Reichweite und E-Paper unter Durchschnitt',body:`Online-Reichweite-Index ${fi(d24.pi)} und E-Paper ${fp(d24.ep)} beide unter Panelschnitt (${fi(aEp)}%). Erste Priorität: strategische Richtungsentscheidung zwischen Yield-First (Paywall wie NOZ) oder Volume-First (Open-Web wie Ippen) — halbherzige Hybriden ohne Ressourcenkommitment scheitern strukturell.`});
+  if(d24.pi>=180&&d24.own<22)rules.push({t:'ia',rule:'PI≥180 + Owned<22%',head:'Reichweitenwachstum ohne Monetarisierungstiefe',body:`Online-Index +${(d24.pi-100).toFixed(0)}% seit 2015, Owned Channel Share nur ${fp(d24.own)}. Traffic vorhanden, aber Conversion fehlt. Empfehlung: Metered Paywall mit Behavioral-Targeting (NOZ-Modell als Blaupause), Newsletter-Gate als Einstieg, Onboarding-Journey für identifizierte High-Intent-Nutzer.`});
+  if(d24.ep>25&&d24.own>25)rules.push({t:'ig',rule:'EP>25% + Owned>25%',head:'Starke Subscriber-Basis: ARPU weiter ausbauen',body:`E-Paper ${fp(d24.ep)} und Owned Channel ${fp(d24.own)} signalisieren zahlungsbereite Kernleserschaft. Next Level: Bundle-Angebote (Print+Digital+App), Premium-Tier mit Investigativjournalismus, Dynamic Paywall für Casual Reader — NOZ-Modell zeigt, wie Paywall-Evolution Churn auf <3% senkt bei gleichzeitiger Reichweitenstabilisierung.`});
+  if(d24.mew>65)rules.push({t:'ib',rule:'Mobile>65%',head:'Mobile dominiert — Monetarisierung anpassen',body:`${fi(d24.mew)}% der PLS via Mobile/MEW. Push-Notifications, Mobile-Paywall-Flows und WhatsApp-Kanäle erzielen nachweislich 15–20% höhere Konversionsraten als Desktop-Äquivalente. Apps haben 3× höhere Verweildauer und 2× niedrigere Churn-Rate — Investment rechnet sich bei diesem Nutzerprofil besonders schnell.`});
+  if(d24.app<5&&d24.ep>15)rules.push({t:'ia',rule:'App<5% + EP>15%',head:'E-Paper-Loyalität nicht in App-Bindung überführt',body:`E-Paper ${fp(d24.ep)} zeigt digitale Zahlungsbereitschaft — aber App-Anteil unter 5% lässt Retention-Potenzial ungenutzt. E-Paper-Nutzer sind die besten App-Konvertierungskandidaten: proven willingness-to-pay + höchste Loyalität. Dediziertes App-Erlebnis mit personalisierten Feeds und Push-Inhalten kann Churn strukturell senken.`});
+  if(d24.ci>82)rules.push({t:'ig',rule:'CI>82',head:'Überdurchschnittliche Printresilienz: Übergangspuffer nutzen',body:`Auflagen-Index ${fi(d24.ci)} klar über Panelschnitt (${fi(aCi)}). Diese Resilienz schafft zeitlichen und finanziellen Spielraum für digitale Transformation. Empfehlung: Print-to-Digital-Upsell-Kampagnen für Bestandsabonnenten, Kombi-Abos mit klarem Digital-Mehrwert, gestaffelte Preismodelle die Wechsel zu Digital incentivieren.`});
+  if(d24.out>20)rules.push({t:'ib',rule:'Outlets>20',head:'Breites Portfolio: SSO und Cross-Selling-Infrastruktur aufbauen',body:`${d24.out} Outlets schaffen erhebliches Cross-Selling-Potenzial. Zentrales CRM, gemeinsame Login-Infrastruktur (SSO) und Paketabos über mehrere Lokalblätter können ARPU um 20–30% steigern. Madsack/RND zeigt exemplarisch: Portfolio-Zentralisierung transformiert Kostenfaktor in aktiven Wachstumstreiber.`});
+  if(!rules.length)rules.push({t:'ig',rule:'Keine kritischen Trigger',head:'Überdurchschnittliche Positionierung',body:`Keine kritischen Schwellenwerte ausgelöst. Publisher ist im Panel gut positioniert.`});
+
+  const ownershipBadge={
+    "DDVG":`<div style="display:flex;align-items:center;gap:6px;margin-top:8px;padding:6px 10px;background:var(--bg3);border-radius:6px;font-size:10px;color:var(--t2)"><span style="font-size:10px">⟷</span><span>Beteiligungsstruktur: SPD-Medienholding · ~26% an Madsack · Metriken stark Madsack-korreliert</span><button onclick="setStratK('Madsack')" style="margin-left:auto;font-size:10px;padding:2px 8px;border-radius:4px;border:1px solid var(--b);background:var(--bg);color:#7c3aed;cursor:pointer">→ Madsack ansehen</button></div>`,
+    "Madsack":`<div style="display:flex;align-items:center;gap:6px;margin-top:8px;padding:6px 10px;background:var(--bg3);border-radius:6px;font-size:10px;color:var(--t2)"><span style="font-size:10px">⟷</span><span>DDVG (SPD-Holding) hält ~26% · RND beliefert 60+ externe Verlage · 2024: Übernahme weiterer DDV-Anteile</span><button onclick="setStratK('DDVG')" style="margin-left:auto;font-size:10px;padding:2px 8px;border-radius:4px;border:1px solid var(--b);background:var(--bg);color:#64748b;cursor:pointer">→ DDVG ansehen</button></div>`,
+  }[k]||'';
+
+  document.getElementById('strat-body').innerHTML=`
+    <div style="background:var(--bg2);border:1px solid var(--b);border-radius:var(--rl);padding:14px 16px;margin-bottom:16px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="width:10px;height:10px;border-radius:50%;background:${c};flex-shrink:0"></div>
+        <span style="font-size:13px;font-weight:500">${D[k].full}</span>
+        <span class="tag ${D[k].at}" style="margin-left:4px">${D[k].arch}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px">
+        <div><div style="font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px">Auflagen-Index</div><div style="font-size:18px;font-weight:500;color:${d24.ci<70?'#dc2626':d24.ci>90?'#16a34a':'#d97706'}">${fi(d24.ci)}</div></div>
+        <div><div style="font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px">Reichweite-Index</div><div style="font-size:18px;font-weight:500;color:${d24.pi>150?'#16a34a':d24.pi<80?'#dc2626':'#d97706'}">${fi(d24.pi)}</div></div>
+        <div><div style="font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px">E-Paper-Anteil</div><div style="font-size:18px;font-weight:500;color:${c}">${fp(d24.ep)}</div></div>
+        <div><div style="font-size:10px;color:var(--t2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px">Owned Channel</div><div style="font-size:18px;font-weight:500">${fp(d24.own)}</div></div>
+      </div>
+      ${ownershipBadge}
+    </div>
+    <div class="g2">
+      <div class="thesis-box">
+        <div class="thesis-box-head">
+          <div class="thesis-dot" style="background:${c}"></div>
+          <span style="font-size:12px;font-weight:500">Strategisches Tiefenprofil</span>
+          <span style="font-size:10px;color:var(--t3);margin-left:auto">IVW-Panel · Röper-Methodik · 2015–2024</span>
+        </div>
+        <ul class="thesis-pts">${(D[k].thesis||[]).map(p=>`<li>${p}</li>`).join('')}</ul>
+      </div>
+      <div>
+        <div class="slbl">Regelbasierte Empfehlungen (${rules.length} Trigger)</div>
+        ${rules.map(r=>`<div class="rec-block ins ${r.t}"><span class="rec-rule">${r.rule}</span><div class="rec-head">${r.head}</div><div class="rec-body">${r.body}</div></div>`).join('')}
+      </div>
+    </div>`;
+}
+
+rOv();
+bPBar(document.getElementById('pb-pub'),'SWMH','setPubK');
+bPBar(document.getElementById('pb-strat'),'SWMH','setStratK');
+</script>
+</body>
+</html>
