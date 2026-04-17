@@ -1,0 +1,279 @@
+
+<h2 class="sr-only">GMICP Germany Market Analysis Framework — interaktives Tool zur Analyse der deutschen Medien- und Kommunikationswirtschaft</h2>
+
+<div id="app" style="font-family:var(--font-sans);font-size:13px;color:var(--color-text-primary)"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const RAW={Wireless:{years:[2019,2020,2021,2022,2023],markets:{2019:26600,2020:25650,2021:26500,2022:27530,2023:27640},firms:{"Deutsche Telekom":{2019:8157,2020:8075,2021:8376,2022:8653,2023:8762},"Vodafone":{2019:5300,2020:5084,2021:6481,2022:6530,2023:6602},"Telefonica":{2019:6647,2020:6730,2021:6942,2022:7394,2023:7767},"United Internet":{2019:2300,2020:1828,2021:1887,2022:1916,2023:2010},"Freenet":{2019:2641,2020:2289,2021:2254,2022:2236,2023:2283}}},Wireline:{years:[2019,2020,2021,2022,2023],markets:{2019:9387,2020:9624,2021:9510,2022:9112,2023:8707},firms:{"Deutsche Telekom":{2019:3980,2020:3980,2021:3868,2022:3467,2023:3109},"Vodafone":{2019:1975,2020:3048,2021:2998,2022:2985,2023:3078},"United Internet":{2019:937,2020:937,2021:893,2022:874,2023:844},"Telefonica":{2019:611,2020:634,2021:629,2022:636,2023:666},"Tele Columbus":{2019:126,2020:129,2021:131,2022:132,2023:147},"EWE":{2019:130,2020:148,2021:146,2022:147,2023:107},"Liberty Global":{2019:1010},"EQT":{2021:75,2022:105,2023:105}}},ISP:{years:[2019,2020,2021,2022,2023],markets:{2019:10160,2020:10408,2021:11034,2022:11681,2023:11008},firms:{"Deutsche Telekom":{2019:4237,2020:4336,2021:4524,2022:4861,2023:5007},"Vodafone":{2019:1924,2020:3067,2021:3201,2022:3228,2023:2666},"United Internet":{2019:1239,2020:1251,2021:1257,2022:1232,2023:1214},"Telefonica":{2019:741,2020:785,2021:814,2022:806,2023:737},"Tele Columbus":{2019:126,2020:176,2021:191,2022:192,2023:201},"EWE":{2019:171,2020:174,2021:206,2022:207,2023:150},"EQT":{2021:118,2022:148,2023:180}}},"Broadcast TV":{years:[2019,2020,2021,2022,2023],markets:{2019:11265,2020:10878,2021:11555,2022:11364,2023:11503},firms:{"ARD":{2019:4635,2020:4635,2021:4817,2022:4873,2023:5133},"ZDF":{2019:2230,2020:2231,2021:2397,2022:2473,2023:2501},"ProSiebenSat.1":{2019:2005,2020:1801,2021:2060,2022:1908,2023:1774},"RTL":{2019:943,2020:857,2021:1033,2022:1055,2023:917}}},"Broadcast Radio":{years:[2019,2020,2021,2022,2023],markets:{2019:2283,2020:2220,2021:2301,2022:2301,2023:2371},firms:{"ARD":{2019:1268,2020:1275,2021:1318,2022:1334,2023:1408},"Deutschlandradio":{2019:231,2020:232,2021:243,2022:251,2023:264},"Regiocast":{2019:39,2020:41,2021:42,2022:38,2023:45},"RTL Group":{2019:44,2020:36,2021:34},"Bertelsmann":{2022:35,2023:36},"Müller Medien":{2019:26,2020:24,2021:25,2022:29,2023:32}}},"Multichannel Video":{years:[2019,2020,2021,2022,2023],markets:{2019:5839,2020:5969,2021:6310,2022:6531,2023:6846},firms:{"Deutsche Telekom":{2019:1614,2020:1777,2021:1888,2022:2037,2023:2196},"Comcast":{2019:1674,2020:1617,2021:1607,2022:1607,2023:1650},"Vodafone":{2019:823,2020:1457,2021:1396,2022:1350,2023:1303},"Tele Columbus":{2019:298,2020:286,2021:267,2022:243,2023:416},"United Internet":{2019:112,2020:176,2021:276,2022:403,2023:231},"Liberty Global":{2019:666}}},"Online Video":{years:[2021,2022,2023],markets:{2021:2980,2022:3434,2023:4103},firms:{"Netflix":{2021:1129,2022:1219,2023:1297},"Walt Disney":{2021:481,2022:556,2023:577},"DAZN":{2021:58,2022:563,2023:609},"Amazon":{2021:333,2022:368,2023:498},"RTL Group":{2021:149,2022:179,2023:226},"Walt Disney+":{2021:481,2022:556,2023:577}}},"Internet Advertising":{years:[2015,2016,2017,2018,2019,2020,2021,2022,2023],markets:{2015:5414,2016:5701,2017:6425,2018:7170,2019:7923,2020:8795,2021:11213,2022:11438,2023:12707},firms:{"Alphabet":{2015:2436,2016:2565,2017:2943,2018:3191,2019:3470,2020:3694,2021:4586,2022:4689,2023:4867},"Meta":{2015:436,2016:757,2017:1200,2018:1560,2019:1975,2020:2494,2021:3369,2022:3324,2023:3715},"Amazon":{2019:546,2020:741,2021:1209,2022:1430,2023:1751}}},Books:{years:[2005,2008,2015,2016,2018,2019,2021,2022],markets:{2005:9159,2008:9614,2015:9188,2016:9276,2018:9134,2019:9291,2021:9630,2022:9444},firms:{"Holtzbrinck":{2015:509,2016:533,2018:576,2019:590,2021:585,2022:518},"Klett Group":{2005:344,2008:434,2015:283,2016:296,2018:318,2019:330,2021:346,2022:350},"Bertelsmann":{2005:202,2008:259,2015:328,2016:309,2018:292,2019:309,2021:332,2022:314},"Wolters Kluwer":{2005:180,2008:175,2015:215,2016:200,2018:268,2019:277,2021:264,2022:285},"Medien Union":{2005:227,2008:247,2015:300,2016:300,2018:300,2019:300,2021:290,2022:290},"Haufe Group":{2005:159,2008:186,2015:255,2016:267,2018:320,2019:355,2021:330,2022:370},"Cornelsen Group":{2005:347,2008:354,2015:260,2016:272,2018:255,2019:250,2021:252,2022:249}}},Newspapers:{years:[2008,2010,2012,2014,2016,2018,2020,2022],markets:{2008:8540,2010:8011,2012:7735,2014:7393,2016:7220,2018:6860,2020:6989,2022:6829},firms:{"Axel Springer":{2008:1887,2010:1570,2012:1454,2014:1146,2016:1011,2018:871,2020:776,2022:724},"Medien Union":{2008:726,2010:689,2012:712,2014:702,2016:715,2018:734,2020:804,2022:806},"Madsack":{2008:214,2010:320,2012:402,2014:384,2016:383,2018:384,2020:377,2022:382},"Funke Media":{2014:569,2016:563,2018:542,2020:524,2022:485},"Publishing Group Ippen":{2008:342,2010:337,2012:325,2014:318,2016:325,2018:391,2020:405,2022:403},"Rheinische Post":{2012:155,2014:222,2016:231,2018:226,2020:245,2022:239}}},Magazines:{years:[2016,2018,2020,2022],markets:{2016:3440,2018:3196,2020:2569,2022:2630},firms:{"Bauer":{2016:712,2018:658,2020:529,2022:513},"Hubert Burda":{2016:526,2018:479,2020:378,2022:379},"Funke Media":{2016:492,2018:495,2020:416,2022:416},"Bertelsmann":{2016:317,2018:316,2020:200,2022:197},"Axel Springer":{2016:145,2018:125,2020:87,2022:87},"Media Holding Klambt":{2018:134,2020:139,2022:145}}},"App Distribution":{years:[2019,2020,2021,2022,2023],markets:{2019:1829,2020:2909,2021:2875,2022:1856,2023:1558},firms:{"Apple":{2019:1068,2020:1403,2021:1353,2022:1000,2023:832},"Alphabet":{2019:761,2020:1578,2021:1521,2022:856,2023:727}}}};
+
+const MACRO={Wireless:{2019:26600,2020:25650,2021:26500,2022:27530,2023:27640},Wireline:{2019:9387,2020:9624,2021:9510,2022:9112,2023:8707},ISP:{2019:10160,2020:10408,2021:11034,2022:11681,2023:11008},"Broadcast TV":{2019:11265,2020:10878,2021:11555,2022:11364,2023:11503},"Broadcast Radio":{2019:2283,2020:2220,2021:2301,2022:2301,2023:2371},"Multichannel Video":{2019:5839,2020:5969,2021:6310,2022:6531,2023:6846},"Online Video":{2019:1612,2020:2279,2021:2980,2022:3434,2023:4103},"Internet Advertising":{2019:7923,2020:8795,2021:11213,2022:11438,2023:12707},Books:{2019:9291,2020:9303,2021:9630,2022:9444,2023:9707},Newspapers:{2019:7156,2020:6989,2021:6984,2022:6829,2023:6683},Magazines:{2019:3037,2020:2569,2021:2610,2022:2630,2023:2544},"App Distribution":{2019:1829,2020:2909,2021:2875,2022:1856,2023:1558},"Digital Games":{2019:5960,2020:7262,2021:7501,2022:7536,2023:7749},"Music Services":{2019:3812,2020:2421,2021:3036,2022:4233,2023:4955}};
+
+const COLORS={Wireless:"#1B3F6E",Wireline:"#2563A8",ISP:"#5B9BD5","Broadcast TV":"#15803D","Broadcast Radio":"#22C55E","Multichannel Video":"#4ADE80","Online Video":"#B91C1C","Internet Advertising":"#D97706",Books:"#7C3AED",Newspapers:"#A78BFA",Magazines:"#C4B5FD","App Distribution":"#64748B","Digital Games":"#0891B2","Music Services":"#06B6D4"};
+
+let state={},cur="Wireless",curYr=2022,activeView="overview",tChart=null,ovChart=null;
+
+function deepCopy(o){return JSON.parse(JSON.stringify(o));}
+function initState(){
+  state={};
+  Object.entries(RAW).forEach(([s,d])=>{state[s]={years:[...d.years],markets:deepCopy(d.markets),firms:deepCopy(d.firms)};});
+}
+
+function getOthers(sec,yr){
+  const mkt=state[sec].markets[yr]||0;
+  const known=Object.values(state[sec].firms).reduce((s,rv)=>s+(rv[yr]||0),0);
+  return Math.max(0,Math.round((mkt-known)*10)/10);
+}
+function calcHHI(sec,yr){
+  const t=state[sec].markets[yr]||0; if(!t) return 0;
+  return Math.round(Object.values(state[sec].firms).reduce((s,rv)=>s+Math.pow((rv[yr]||0)/t*100,2),0));
+}
+function calcCR(sec,yr,n){
+  const t=state[sec].markets[yr]||0; if(!t) return 0;
+  return parseFloat(Object.values(state[sec].firms).map(rv=>rv[yr]||0).sort((a,b)=>b-a).slice(0,n).reduce((s,v)=>s+v/t*100,0).toFixed(1));
+}
+function hhiLabel(h){if(h<1000)return{text:"Unkonzentriert",color:"#15803D"};if(h<1800)return{text:"Mäßig",color:"#B45309"};if(h<2500)return{text:"Konzentriert",color:"#C2410C"};return{text:"Hochkonzentriert",color:"#B91C1C"};}
+
+function render(){
+  document.getElementById("app").innerHTML=buildHTML();
+  attachEvents();
+  renderCharts();
+}
+
+function buildHTML(){
+  const secKeys=Object.keys(RAW);
+  const tabs=secKeys.map(s=>`<button onclick="setSec('${s}')" style="font-size:11px;padding:4px 9px;border-radius:20px;border:0.5px solid ${cur===s?COLORS[s]:'var(--color-border-tertiary)'};background:${cur===s?COLORS[s]+'18':'var(--color-background-primary)'};color:${cur===s?COLORS[s]:'var(--color-text-secondary)'};cursor:pointer;white-space:nowrap;font-weight:${cur===s?500:400}">${s}</button>`).join('');
+
+  const ovBtn=`<button onclick="setView('overview')" style="font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid ${activeView==='overview'?'#D97706':'var(--color-border-tertiary)'};background:${activeView==='overview'?'#FEF3C7':'var(--color-background-primary)'};color:${activeView==='overview'?'#92400E':'var(--color-text-secondary)'};cursor:pointer;font-weight:${activeView==='overview'?500:400};white-space:nowrap">Gesamtübersicht</button>`;
+
+  const hdr=`<div style="padding:.8rem 1.25rem;border-bottom:0.5px solid var(--color-border-tertiary)">
+    <div style="font-size:14px;font-weight:500;margin-bottom:2px">GMICP Germany — Market Analysis Framework</div>
+    <div style="font-size:11px;color:var(--color-text-secondary)">German Media &amp; ICT Concentration Panel · Institut für Medien- und Kommunikationspolitik</div>
+  </div>`;
+
+  const navRow=`<div style="padding:.5rem 1.25rem;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;gap:5px;flex-wrap:wrap;align-items:center">
+    ${ovBtn}
+    <span style="width:0.5px;height:14px;background:var(--color-border-tertiary);margin:0 2px"></span>
+    ${tabs}
+  </div>`;
+
+  if(activeView==='overview') return hdr+navRow+buildOverview();
+  return hdr+navRow+buildSector();
+}
+
+function buildOverview(){
+  return `<div style="padding:.9rem 1.25rem">
+    <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px">Gesamtumsatz der deutschen Medien- und Kommunikationswirtschaft 2019–2023, nach Teilsektoren (Mio. EUR)</div>
+    <div style="position:relative;width:100%;height:360px"><canvas id="ovChart" role="img" aria-label="Gestapeltes Säulendiagramm Gesamtumsatz Medienwirtschaft 2019-2023">Umsatzentwicklung der deutschen Medienwirtschaft 2019 bis 2023, aufgeschlüsselt nach 14 Sektoren.</canvas></div>
+    <div id="ovLegend" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px"></div>
+  </div>`;
+}
+
+function buildSector(){
+  const mkt=state[cur].markets[curYr]||0;
+  const hhi=calcHHI(cur,curYr);
+  const cr4=calcCR(cur,curYr,4);
+  const cr1=calcCR(cur,curYr,1);
+  const{text:lt,color:lc}=hhiLabel(hhi);
+  const others=getOthers(cur,curYr);
+  const baseMkt=RAW[cur].markets[curYr]||0;
+  const mktMod=baseMkt>0&&Math.abs(mkt-baseMkt)>0.5;
+
+  const yrChips=state[cur].years.map(y=>`<button onclick="setYr(${y})" style="font-size:11px;padding:2px 8px;border-radius:10px;border:0.5px solid ${y===curYr?COLORS[cur]:'var(--color-border-tertiary)'};background:${y===curYr?COLORS[cur]:'var(--color-background-primary)'};color:${y===curYr?'#fff':'var(--color-text-secondary)'};cursor:pointer">${y}</button>`).join('');
+
+  const metrics=`<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:.8rem 1.25rem;border-bottom:0.5px solid var(--color-border-tertiary)">
+    <div style="background:var(--color-background-secondary);border-radius:8px;padding:.65rem .9rem">
+      <div style="font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px">Gesamtmarkt ${curYr}</div>
+      <div style="font-size:18px;font-weight:500">€${mkt?(mkt/1000).toFixed(1)+'Mrd':'—'}</div>
+      <div style="font-size:10px;color:var(--color-text-secondary);margin-top:2px">${mktMod?'Orig: €'+(baseMkt/1000).toFixed(1)+'Mrd':'Mio. EUR'}</div>
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:8px;padding:.65rem .9rem">
+      <div style="font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px">HHI (excl. Others)</div>
+      <div style="font-size:18px;font-weight:500;color:${lc}">${hhi||'—'}</div>
+      <div style="font-size:10px;color:${lc};margin-top:2px">${lt}</div>
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:8px;padding:.65rem .9rem">
+      <div style="font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px">CR4 (excl. Others)</div>
+      <div style="font-size:18px;font-weight:500">${cr4?cr4+'%':'—'}</div>
+      <div style="font-size:10px;color:var(--color-text-secondary);margin-top:2px">Top-4 Marktanteil</div>
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:8px;padding:.65rem .9rem">
+      <div style="font-size:10px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px">Marktführer-Anteil</div>
+      <div style="font-size:18px;font-weight:500">${cr1?cr1+'%':'—'}</div>
+      <div style="font-size:10px;color:var(--color-text-secondary);margin-top:2px">Anteil #1</div>
+    </div>
+  </div>`;
+
+  const ctrlBar=`<div style="display:flex;align-items:center;gap:8px;padding:.5rem 1.25rem;background:var(--color-background-secondary);border-bottom:0.5px solid var(--color-border-tertiary);flex-wrap:wrap">
+    <span style="font-size:11px;color:var(--color-text-secondary)">Jahr:</span>
+    <div style="display:flex;gap:4px;flex-wrap:wrap">${yrChips}</div>
+    <span style="width:0.5px;height:14px;background:var(--color-border-tertiary)"></span>
+    <span style="font-size:11px;color:var(--color-text-secondary)">Gesamtmarkt (Mio. €):</span>
+    <input id="mktInp" type="number" value="${mkt||''}" step="50" oninput="onMkt()" style="font-size:12px;font-weight:500;padding:3px 7px;border-radius:6px;border:0.5px solid ${mktMod?COLORS[cur]:'var(--color-border-secondary)'};background:var(--color-background-primary);color:${mktMod?COLORS[cur]:'var(--color-text-primary)'};width:105px;text-align:right"/>
+    <button onclick="rstMkt()" style="font-size:11px;padding:2px 7px;border-radius:6px;border:0.5px solid var(--color-border-tertiary);background:none;color:var(--color-text-secondary);cursor:pointer">↺</button>
+    <button onclick="togAddYr()" style="font-size:11px;padding:2px 7px;border-radius:6px;border:0.5px solid var(--color-border-tertiary);background:none;color:var(--color-text-secondary);cursor:pointer">+ Jahr</button>
+  </div>
+  <div id="addYrRow" style="display:none;align-items:center;gap:6px;padding:.45rem 1.25rem;border-bottom:0.5px solid var(--color-border-tertiary);flex-wrap:wrap">
+    <span style="font-size:11px;color:var(--color-text-secondary)">Neues Jahr:</span>
+    <input id="ayrY" type="number" placeholder="z.B. 2024" style="font-size:12px;padding:3px 7px;border-radius:6px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-primary);width:80px"/>
+    <span style="font-size:11px;color:var(--color-text-secondary)">Marktgröße:</span>
+    <input id="ayrM" type="number" placeholder="Mio. EUR" style="font-size:12px;padding:3px 7px;border-radius:6px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-primary);width:110px"/>
+    <button onclick="addYr()" style="font-size:12px;padding:3px 9px;border-radius:6px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);cursor:pointer">Hinzufügen</button>
+    <button onclick="togAddYr()" style="font-size:11px;padding:2px 7px;border-radius:6px;border:0.5px solid var(--color-border-tertiary);background:none;color:var(--color-text-secondary);cursor:pointer">Abbrechen</button>
+  </div>`;
+
+  const vtabsHTML=`<div style="display:flex;border-bottom:0.5px solid var(--color-border-tertiary);padding:0 1.25rem">
+    ${["rank","db","trend","logic"].map((v,i)=>{
+      const labels=["Marktanteile","Datenbank ✏","Trendanalyse","Rechenlogik"];
+      const act=activeView===v;
+      return `<button onclick="setView('${v}')" style="font-size:12px;padding:6px 11px;border:none;border-bottom:2px solid ${act?'var(--color-text-primary)':'transparent'};background:none;color:${act?'var(--color-text-primary)':'var(--color-text-secondary)'};cursor:pointer;font-weight:${act?500:400};margin-bottom:-0.5px">${labels[i]}</button>`;
+    }).join('')}
+  </div>`;
+
+  let content='';
+  if(activeView==='rank') content=buildRank();
+  else if(activeView==='db') content=buildDB();
+  else if(activeView==='trend') content=buildTrendPlaceholder();
+  else content=buildLogic();
+
+  return ctrlBar+metrics+vtabsHTML+`<div style="padding:.9rem 1.25rem">${content}</div>`;
+}
+
+function buildRank(){
+  const t=state[cur].markets[curYr]||0;
+  if(!t) return `<p style="font-size:12px;color:var(--color-text-secondary)">Kein Gesamtmarkt für ${curYr}. Bitte oben eingeben.</p>`;
+  const firms=Object.entries(state[cur].firms).map(([n,rv])=>({n,v:rv[curYr]||0})).filter(x=>x.v>0).sort((a,b)=>b.v-a.v);
+  const others=getOthers(cur,curYr);
+  const all=[...firms];
+  if(others>0) all.push({n:'Others (Residual)',v:others,isOth:true});
+  const maxV=all[0]?.v||1;
+  const col=COLORS[cur];
+  let h=`<div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px">${cur} · ${curYr} · Gesamtmarkt €${Math.round(t).toLocaleString('de-DE')}M · HHI und CR4 exkl. Others</div>`;
+  all.forEach((f,i)=>{
+    const sh=(f.v/t*100).toFixed(1);
+    const w=Math.round(f.v/maxV*100);
+    const bc=f.isOth?'#94A3B8':col;
+    h+=`<div style="display:flex;align-items:center;gap:5px;margin-bottom:3px">
+      <div style="font-size:11px;color:var(--color-text-secondary);width:148px;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0;${f.isOth?'font-style:italic':''}">${i+1}. ${f.n}</div>
+      <div style="flex:1;background:var(--color-background-secondary);border-radius:2px;height:19px;overflow:hidden">
+        <div style="width:${w}%;height:100%;background:${bc};display:flex;align-items:center;justify-content:flex-end;padding-right:5px">
+          <span style="font-size:10px;font-weight:500;color:#fff;white-space:nowrap">${sh}%</span>
+        </div>
+      </div>
+      <div style="font-size:10px;color:var(--color-text-secondary);width:68px;text-align:right;font-family:var(--font-mono);flex-shrink:0">€${Math.round(f.v).toLocaleString('de-DE')}M</div>
+    </div>`;
+  });
+  if(others>0) h+=`<div style="background:var(--color-background-secondary);border-radius:8px;padding:.65rem .9rem;margin-top:8px;font-size:12px;color:var(--color-text-secondary);line-height:1.6"><strong style="color:var(--color-text-primary)">Others = Residual:</strong> €${Math.round(others).toLocaleString('de-DE')}M = Gesamtmarkt − Σ erfasste Firmen. Nicht in HHI/CR4.</div>`;
+  return h;
+}
+
+function buildDB(){
+  const yrs=state[cur].years;
+  const fnames=Object.keys(state[cur].firms);
+  let h=`<div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px">Umsätze editierbar · Others auto-kalkuliert · HHI/CR4 exkl. Others</div>
+  <div style="overflow-x:auto">
+  <table style="border-collapse:collapse;font-size:11px;min-width:100%">
+  <thead><tr>
+    <th style="font-size:10px;color:var(--color-text-secondary);padding:4px 6px;border-bottom:0.5px solid var(--color-border-tertiary);font-weight:500;text-align:left;white-space:nowrap">Unternehmen</th>
+    ${yrs.map(y=>`<th style="font-size:10px;color:var(--color-text-secondary);padding:4px 6px;border-bottom:0.5px solid var(--color-border-tertiary);font-weight:500;text-align:right">${y}</th>`).join('')}
+    <th style="font-size:10px;color:var(--color-text-secondary);padding:4px 6px;border-bottom:0.5px solid var(--color-border-tertiary);font-weight:500;text-align:right">Anteil ${curYr}</th>
+    <th style="padding:4px 6px;border-bottom:0.5px solid var(--color-border-tertiary)"></th>
+  </tr></thead><tbody>`;
+  fnames.forEach(nm=>{
+    const isBase=!!RAW[cur].firms[nm];
+    const t=state[cur].markets[curYr]||0;
+    const sh=t&&state[cur].firms[nm][curYr]?((state[cur].firms[nm][curYr]/t)*100).toFixed(1)+'%':'—';
+    h+=`<tr>
+      <td style="padding:3px 6px;border-bottom:0.5px solid var(--color-border-tertiary);font-size:11px;white-space:nowrap;color:${isBase?'var(--color-text-primary)':'#1D4ED8'}">${nm}${isBase?'':' <span style="font-size:9px;background:#DBEAFE;color:#1E40AF;padding:1px 4px;border-radius:4px">neu</span>'}</td>
+      ${yrs.map(y=>{
+        const v=state[cur].firms[nm][y]??'';
+        const bv=RAW[cur].firms[nm]?.[y]??null;
+        const mod=bv!==null&&v!==''&&Math.abs(parseFloat(v)-bv)>0.1;
+        return `<td style="padding:3px 6px;border-bottom:0.5px solid var(--color-border-tertiary)"><input type="number" value="${v}" placeholder="—" data-nm="${nm}" data-yr="${y}" oninput="onCell(this)" style="font-size:11px;padding:2px 4px;border-radius:3px;border:0.5px solid ${mod?COLORS[cur]:'var(--color-border-tertiary)'};background:var(--color-background-primary);color:${mod?COLORS[cur]:'var(--color-text-primary)'};width:65px;text-align:right;font-family:var(--font-mono)"/></td>`;
+      }).join('')}
+      <td style="padding:3px 6px;border-bottom:0.5px solid var(--color-border-tertiary);font-size:11px;color:${sh!=='—'?COLORS[cur]:'var(--color-text-secondary)'};font-weight:${sh!=='—'?500:400};text-align:right;font-family:var(--font-mono)">${sh}</td>
+      <td style="padding:3px 6px;border-bottom:0.5px solid var(--color-border-tertiary)"><button data-del="${nm}" onclick="delFirm(this)" style="font-size:10px;color:var(--color-text-secondary);cursor:pointer;padding:1px 4px;border:0.5px solid var(--color-border-tertiary);border-radius:3px;background:none">✕</button></td>
+    </tr>`;
+  });
+  // Others row
+  h+=`<tr style="opacity:.6"><td style="padding:3px 6px;border-bottom:0.5px solid var(--color-border-tertiary);font-size:11px;font-style:italic;color:var(--color-text-secondary)">Others (Residual — auto)</td>
+    ${yrs.map(y=>{const o=getOthers(cur,y);return`<td style="padding:3px 6px;border-bottom:0.5px solid var(--color-border-tertiary);font-size:11px;color:var(--color-text-secondary);text-align:right;font-family:var(--font-mono)">${o>0?Math.round(o):'—'}</td>`;}).join('')}
+    <td style="padding:3px 6px;border-bottom:0.5px solid var(--color-border-tertiary);font-size:11px;color:var(--color-text-secondary);text-align:right;font-family:var(--font-mono)">${(()=>{const t=state[cur].markets[curYr]||0,o=getOthers(cur,curYr);return t&&o?((o/t)*100).toFixed(1)+'%':'—';})()}</td><td></td>
+  </tr></tbody></table></div>
+  <div style="display:flex;gap:6px;align-items:center;margin-top:8px;flex-wrap:wrap;padding-top:8px;border-top:0.5px solid var(--color-border-tertiary)">
+    <span style="font-size:11px;color:var(--color-text-secondary)">Neue Firma:</span>
+    <input id="newNm" type="text" placeholder="Name..." style="font-size:12px;padding:3px 7px;border-radius:6px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-primary);width:140px"/>
+    ${yrs.map(y=>`<input id="nr${y}" type="number" placeholder="${y}" style="font-size:11px;padding:3px 5px;border-radius:6px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);color:var(--color-text-primary);width:65px;text-align:right;font-family:var(--font-mono)"/>`).join('')}
+    <button onclick="addFirm()" style="font-size:12px;padding:3px 10px;border-radius:6px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);cursor:pointer">+ Hinzufügen</button>
+  </div>`;
+  return h;
+}
+
+function buildTrendPlaceholder(){
+  return `<div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px">Marktanteil-Entwicklung Top 5 · ${cur} · Datenlücken werden verbunden</div>
+  <div id="trendLegend" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px"></div>
+  <div style="position:relative;width:100%;height:260px"><canvas id="tChart" role="img" aria-label="Marktanteil Trendanalyse ${cur}">Marktanteil-Entwicklung der Top-5-Unternehmen in ${cur}.</canvas></div>`;
+}
+
+function buildLogic(){
+  const t=state[cur].markets[curYr]||0,h=calcHHI(cur,curYr),n=Object.keys(state[cur].firms).length,o=getOthers(cur,curYr);
+  const mk=v=>`<div style="background:var(--color-background-secondary);border-radius:8px;padding:.65rem .9rem;font-family:var(--font-mono);font-size:11px;line-height:1.7">${v}</div>`;
+  return `<div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:8px">Rechenlogik des Frameworks</div>
+  <div style="display:grid;gap:8px">
+    ${mk(`<strong style="font-family:var(--font-sans);font-size:12px">1. Datenbank (fix, editierbar)</strong><br>rev(Firma i, Jahr t) → zentrale Tabelle<br>${n} Firmen · ${state[cur].years.length} Jahre · ${cur}`)}
+    ${mk(`<strong style="font-family:var(--font-sans);font-size:12px">2. Variable X (Gesamtmarkt)</strong><br>X(${cur}, ${curYr}) = €${t?Math.round(t).toLocaleString('de-DE'):'—'}M ← eine Zelle, alle Anteile referenzieren X`)}
+    ${mk(`<strong style="font-family:var(--font-sans);font-size:12px">3. Dynamisches Others</strong><br>Others = X − Σ rev(i,t) = €${o?Math.round(o).toLocaleString('de-DE'):0}M<br>Sinkt automatisch wenn neue Firmen hinzukommen`)}
+    ${mk(`<strong style="font-family:var(--font-sans);font-size:12px">4. Konzentrationsmetriken (excl. Others)</strong><br>share(i) = rev(i) ÷ X × 100<br>HHI = Σ share(i)² = <strong>${h||'n/v'}</strong> · ${hhiLabel(h).text}<br>CR4 = ${calcCR(cur,curYr,4)?calcCR(cur,curYr,4)+'%':'n/v'} · Noam = ${h&&n?Math.round(h/Math.sqrt(n)):'-'} (n=${n} Firmen)`)}
+  </div>`;
+}
+
+function renderCharts(){
+  if(activeView==='overview') renderOvChart();
+  else if(activeView==='trend') renderTrendChart();
+}
+
+function renderOvChart(){
+  const c=document.getElementById('ovChart'); if(!c) return;
+  const yrs=[2019,2020,2021,2022,2023];
+  const secs=Object.keys(MACRO);
+  if(ovChart){ovChart.destroy();ovChart=null;}
+  ovChart=new Chart(c,{type:'bar',
+    data:{labels:yrs,datasets:secs.map(s=>({label:s,data:yrs.map(y=>MACRO[s][y]||null),backgroundColor:COLORS[s]||'#888',borderWidth:0}))},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: €${Math.round(ctx.raw).toLocaleString('de-DE')}M`}}},
+      scales:{x:{stacked:true,ticks:{font:{size:10}}},y:{stacked:true,ticks:{callback:v=>v>=1000?Math.round(v/1000)+'Mrd':v,font:{size:10}},grid:{color:'rgba(128,128,128,.1)'}}}}
+  });
+  const leg=document.getElementById('ovLegend');
+  if(leg) leg.innerHTML=secs.map(s=>`<span style="display:flex;align-items:center;gap:3px;font-size:10px;color:var(--color-text-secondary)"><span style="width:8px;height:8px;border-radius:2px;background:${COLORS[s]||'#888'};display:inline-block;flex-shrink:0"></span>${s}</span>`).join('');
+}
+
+function renderTrendChart(){
+  const c=document.getElementById('tChart'); if(!c) return;
+  const firms=state[cur].firms,yrs=state[cur].years;
+  const latestYr=yrs.includes(curYr)?curYr:yrs[yrs.length-1];
+  const top5=Object.entries(firms).map(([n,rv])=>({n,v:rv[latestYr]||rv[Math.max(...Object.keys(rv).map(Number))]||0})).sort((a,b)=>b.v-a.v).slice(0,5).map(x=>x.n);
+  const pal=[COLORS[cur],'#D97706','#15803D','#7C3AED','#64748B'];
+  if(tChart){tChart.destroy();tChart=null;}
+  const leg=document.getElementById('trendLegend');
+  if(leg) leg.innerHTML=top5.map((n,i)=>`<span style="display:flex;align-items:center;gap:3px;font-size:11px;color:var(--color-text-secondary)"><span style="width:8px;height:8px;border-radius:2px;background:${pal[i]};display:inline-block;flex-shrink:0"></span>${n}</span>`).join('');
+  tChart=new Chart(c,{type:'line',
+    data:{labels:yrs,datasets:top5.map((nm,i)=>({label:nm,data:yrs.map(y=>{const t=state[cur].markets[y];return t&&firms[nm]?.[y]!=null?parseFloat((firms[nm][y]/t*100).toFixed(2)):null;}),borderColor:pal[i],backgroundColor:'transparent',tension:.35,pointRadius:3,borderWidth:2,pointBackgroundColor:pal[i],spanGaps:true}))},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{callback:v=>v.toFixed(0)+'%',font:{size:10}},grid:{color:'rgba(128,128,128,.1)'}},x:{ticks:{font:{size:10},maxRotation:45,autoSkip:true,maxTicksLimit:12},grid:{display:false}}}}
+  });
+}
+
+function attachEvents(){}
+
+function setSec(s){cur=s;const yrs=state[s].years.filter(y=>state[s].markets[y]);curYr=yrs.includes(2022)?2022:yrs[yrs.length-1]||state[s].years[state[s].years.length-1];if(activeView==='overview')activeView='rank';if(tChart){tChart.destroy();tChart=null;}render();}
+function setYr(y){curYr=y;if(tChart){tChart.destroy();tChart=null;}render();}
+function setView(v){activeView=v;if(tChart&&v!=='trend'){tChart.destroy();tChart=null;}render();}
+function onMkt(){const v=parseFloat(document.getElementById('mktInp')?.value);if(!isNaN(v)&&v>0){state[cur].markets[curYr]=v;const m=document.getElementById('mrow');if(m){const hhi=calcHHI(cur,curYr);const{text:lt,color:lc}=hhiLabel(hhi);const cr4=calcCR(cur,curYr,4);const cr1=calcCR(cur,curYr,1);const mc=m.querySelectorAll('[data-mc]');if(mc.length){}}}render();}
+function rstMkt(){state[cur].markets[curYr]=RAW[cur].markets[curYr]||0;render();}
+function togAddYr(){const r=document.getElementById('addYrRow');if(r)r.style.display=r.style.display==='flex'?'none':'flex';}
+function addYr(){const y=parseInt(document.getElementById('ayrY')?.value);const m=parseFloat(document.getElementById('ayrM')?.value);if(!y||y<1900||y>2100)return;if(!state[cur].years.includes(y)){state[cur].years.push(y);state[cur].years.sort((a,b)=>a-b);}if(!isNaN(m)&&m>0)state[cur].markets[y]=m;curYr=y;render();}
+function onCell(inp){const nm=inp.dataset.nm,yr=parseInt(inp.dataset.yr),v=parseFloat(inp.value);if(!isNaN(v)&&v>=0)state[cur].firms[nm][yr]=v;else delete state[cur].firms[nm][yr];render();}
+function delFirm(btn){const nm=btn.dataset.del;delete state[cur].firms[nm];render();}
+function addFirm(){const nm=document.getElementById('newNm')?.value.trim();if(!nm||state[cur].firms[nm])return;const revs={};state[cur].years.forEach(y=>{const v=parseFloat(document.getElementById('nr'+y)?.value||'');if(!isNaN(v)&&v>0)revs[y]=v;});if(!Object.keys(revs).length)return;state[cur].firms[nm]=revs;render();}
+
+initState();
+render();
+</script>
